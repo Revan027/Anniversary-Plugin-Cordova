@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<plugin xmlns="http://www.phonegap.com/ns/plugins/1.0" id="com.revan.anniversaryplugin" version="1.0.0">
+    <name>Anniversary plugin</name>
+    <description>Sample Alarm Plugin</description>
+    <license>MIT</license>
+    <keywords>phonegap,alarm</keywords>
+
+
+    <js-module src="www/alarmplugin.js" name="AlarmPlugin">
+        <clobbers target="navigator.plugins.alarm" />
+    </js-module>
+
+    <!-- android -->
+    <platform name="android">
+        <config-file target="res/xml/config.xml" parent="/*">
+            <feature name="AlarmPlugin">
+                <param name="android-package" value="com.revan.anniversaryplugin.AlarmPlugin"/>
+            </feature>
+        </config-file>
+		
+		<!-- intents pointant sur l'activité main -->
+		<config-file target="AndroidManifest.xml" parent="/manifest/application/activity">
+            <intent-filter>
+                <action android:name="com.revan.anniversaryplugin.ALARM" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </config-file>
+		
+		<!-- service -->
+		<config-file target="AndroidManifest.xml" parent="/manifest/application">
+			<service android:name="com.revan.anniversaryplugin.RebootService"  android:enabled="true"/>
+		</config-file>
+			
+		<!-- declaration de l'activité 2 -->
+		<config-file target="AndroidManifest.xml" parent="/manifest/application">
+			<activity android:label="Memory-aid" android:name="com.revan.anniversaryplugin.WakeUp" android:showOnLockScreen="true" android:screenOrientation="sensorPortrait" ></activity>
+		</config-file>
+	
+		<!-- declaration des permissions pour utiliser les fonctionallitée -->
+        <config-file target="AndroidManifest.xml" parent="/manifest">
+            <uses-permission android:name="android.permission.WAKE_LOCK" />
+            <uses-permission android:name="android.permission.DISABLE_KEYGUARD" />
+			<uses-permission android:name="android.permission.READ_CONTACTS" />
+            <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+            <uses-permission android:name="android.permission.VIBRATE"/>
+			<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+			<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+			<uses-permission android:name="android.permission.SEND_SMS"/>
+			<uses-permission android:name="android.permission.RECEIVE_SMS"/>
+			<uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+        </config-file>
+
+		<!-- declaration des Broadcast Receiver -->
+        <config-file target="AndroidManifest.xml" parent="/manifest/application">
+            <receiver android:name="com.revan.anniversaryplugin.broadcast.AlarmReceiver" android:process=":remote"><!-- service distants -->
+            </receiver>
+			
+            <receiver android:name="com.revan.anniversaryplugin.broadcast.AlarmBoot"><!-- service de base -->
+                <intent-filter android:priority="100">
+                    <action android:name="android.intent.action.BOOT_COMPLETED"></action>
+                </intent-filter>
+            </receiver>
+			
+            <receiver android:name="com.revan.anniversaryplugin.broadcast.SmsDeliveredReceiver"><!-- service perso-->
+                <intent-filter>
+                    <action android:name="SMS_DELIVERED"></action><!-- action correspondant à un intent et qui écouter avec brodcaster -->
+                </intent-filter>
+            </receiver>
+			
+            <receiver android:name="com.revan.anniversaryplugin.broadcast.SmsSentReceiver">
+                <intent-filter>
+                    <action android:name="SMS_SENT"></action>
+                </intent-filter>
+            </receiver>		
+        </config-file>
+		
+		<source-file src="src/android/WakeUp.java" target-dir="src/com/revan/anniversaryplugin" />
+        <source-file src="src/android/AlarmPlugin.java" target-dir="src/com/revan/anniversaryplugin" />  
+		<source-file src="src/android/res/layout/wake_up_activity.xml" target-dir="res/layout"/>
+		<source-file src="src/android/res/drawable/buttonshape.xml" target-dir="res/drawable"/>			
+        <source-file src="src/android/broadcast/AlarmBoot.java" target-dir="src/com/revan/anniversaryplugin/broadcast" />      
+        <source-file src="src/android/broadcast/AlarmReceiver.java" target-dir="src/com/revan/anniversaryplugin/broadcast" />  
+		<source-file src="src/android/broadcast/SmsSentReceiver.java" target-dir="src/com/revan/anniversaryplugin/broadcast" />	
+        <source-file src="src/android/broadcast/SmsDeliveredReceiver.java" target-dir="src/com/revan/anniversaryplugin/broadcast" />		
+		<source-file src="src/android/alarme/Alarme.java" target-dir="src/com/revan/anniversaryplugin/alarme" /> 
+        <source-file src="src/android/alarme/IntentCreation.java" target-dir="src/com/revan/anniversaryplugin/alarme" />	
+        <source-file src="src/android/db/DBHelper.java" target-dir="src/com/revan/anniversaryplugin/db" />  
+            <source-file src="src/android/db/DAO.java" target-dir="src/com/revan/anniversaryplugin/db" />
+            <source-file src="src/android/db/Option.java" target-dir="src/com/revan/anniversaryplugin/db" />  
+            <source-file src="src/android/db/User.java" target-dir="src/com/revan/anniversaryplugin/db" />             
+        <source-file src="src/android/db/DBReglage.java" target-dir="src/com/revan/anniversaryplugin/db" />
+        <source-file src="src/android/lib/Fichier.java" target-dir="src/com/revan/anniversaryplugin/lib" />
+		<source-file src="src/android/lib/Test.java" target-dir="src/com/revan/anniversaryplugin/lib" />	 		
+		<source-file src="src/android/lib/NotificationCreation.java" target-dir="src/com/revan/anniversaryplugin/lib" />
+		<source-file src="src/android/lib/DateOperation.java" target-dir="src/com/revan/anniversaryplugin/lib" />
+		<source-file src="src/android/lib/SingletonServiceManager.java" target-dir="src/com/revan/anniversaryplugin/lib" />			
+        <source-file src="src/android/sms/SmsCreation.java" target-dir="src/com/revan/anniversaryplugin/sms" />	
+		<source-file src="src/android/RebootService.java" target-dir="src/com/revan/anniversaryplugin" />
+						
+     </platform>          
+</plugin>

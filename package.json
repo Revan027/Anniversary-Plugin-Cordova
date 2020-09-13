@@ -1,0 +1,23 @@
+{
+  "name": "com.revan.anniversaryplugin",
+  "version": "1.0.0",
+  "description": "Anniversary plugin",
+  "cordova": {
+    "id": "com.revan.anniversaryplugin",
+    "platforms": [
+      "android"
+    ]
+  },
+  "keywords": [
+    "ecosystem:cordova",
+    "cordova-android"
+  ],
+  "engines": [
+    {
+      "name": "cordova",
+      "version": ">=3.4.0"
+    }
+  ],
+  "author": "revan",
+  "license": "ISC"
+}

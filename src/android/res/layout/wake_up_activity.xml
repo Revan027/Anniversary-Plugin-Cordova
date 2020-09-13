@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="16dp"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp"
+    android:paddingTop="16dp"
+    android:background="#000000">
+   
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Rappel d'anniversaire"
+        android:id="@+id/textView"
+        android:layout_alignParentLeft="true"
+        android:layout_marginTop="77dp"
+        android:textColor="#FFFFFF"  />
+
+    <Button
+        android:id="@+id/validate"
+        android:text="OK"
+        android:textColor="#FFFFFF"
+        android:textSize="32sp"
+        android:layout_width="147dp"
+        android:layout_height="60dp"
+        android:background="@drawable/buttonshape"
+        android:shadowColor="#A8A0A5"
+        android:shadowDx="0"
+        android:shadowDy="0"
+        android:shadowRadius="5"/>
+ </RelativeLayout>
