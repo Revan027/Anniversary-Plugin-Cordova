@@ -71,6 +71,15 @@ var alarm = {
             [id,data]
             );
       },
+      searchDate: function(dateSearch,successCallback, errorCallback) { 
+            cordova.exec(
+                successCallback,
+                errorCallback,
+                "AlarmPlugin",
+                "SearchDate",
+                [dateSearch]
+            );
+      },
 	modif: function(tabId,new_name,new_num_tel, successCallback, errorCallback) {
        
         cordova.exec(

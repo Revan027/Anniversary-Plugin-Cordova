@@ -54,6 +54,7 @@ import android.graphics.Color;
 import android.widget.Toast;
 import org.apache.cordova.PluginResult;
 import java.util.HashMap;
+import java.util.Date;
 
 /***************** classe liant avec l'interface **********************/
 public class AlarmPlugin extends CordovaPlugin{
@@ -62,6 +63,7 @@ public class AlarmPlugin extends CordovaPlugin{
       private CallbackContext callback  = null;
       public Option option = null;
       public User user = null;
+      public Anniversary anniversary = null;
       
       
       @Override
@@ -136,8 +138,7 @@ public class AlarmPlugin extends CordovaPlugin{
 			if("Init".equals(action)){		
                         if(this.Init()) resp = "Init ok";
 
-                        else  resp = "Erreur à l'init";
-
+                        else resp = "Erreur à l'initialisation de l'application";
                   }
                   else if("PhoneContacts".equals(action)){	
 				/*int REQUEST_SELECT_CONTACT = 1;
@@ -189,15 +190,18 @@ public class AlarmPlugin extends CordovaPlugin{
                               }                           
                               String fullDate = date + " " + hour;//date complete
                               
-                              SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm");
+                              SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
                               Date obDate = sdf.parse(fullDate);
                               
                               if(obDate.before(new Date())){
                                     resp = "La date est déja passée";
-                              }else{
+                              }else{      
                                     this.user = new User(this.cordova.getActivity(),name,phone); 
-                                    this.user.Add();
-                                    resp =  "ok"; 
+                                    long id = this.user.Add();
+
+                                    this.anniversary = new Anniversary(this.cordova.getActivity(),fullDate,fullDate,id); 
+                                    this.anniversary.Add();
+                                    resp =  date; 
                               }  
                         } catch(Exception e) {	
                               callbackContext.error(e.getMessage());
@@ -216,7 +220,18 @@ public class AlarmPlugin extends CordovaPlugin{
 
                               return false;
                         }         	
-			}		            			
+                  }
+                  else if ("SearchDate".equals(action)) {
+                        try {	
+                              String dateSearch =  args.getString(0);
+                              resp = this.anniversary.GetByDate(dateSearch).toString();
+
+                        } catch(Exception e) {	
+                              callbackContext.error(e.getMessage());
+
+                              return false;
+                        }         	
+			}			            			
 		} catch(Exception e) {	
 
                   callbackContext.error(e.getMessage());
@@ -231,9 +246,9 @@ public class AlarmPlugin extends CordovaPlugin{
       /***************** Initialisation de l'application (channel de notification) **********************/
       private boolean Init(){
             this.option = new Option(this.cordova.getActivity());
-            this.user = new User(this.cordova.getActivity());
-            
-            
+            this.user = new User(this.cordova.getActivity());           
+            this.anniversary = new Anniversary(this.cordova.getActivity());
+
             NotificationCreation nc = new NotificationCreation(this.cordova.getActivity());// init channel
             nc.CreateNotificationChannel();
 

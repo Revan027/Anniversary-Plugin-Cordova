@@ -88,7 +88,8 @@
         <source-file src="src/android/db/DBHelper.java" target-dir="src/com/revan/anniversaryplugin/db" />  
             <source-file src="src/android/db/DAO.java" target-dir="src/com/revan/anniversaryplugin/db" />
             <source-file src="src/android/db/Option.java" target-dir="src/com/revan/anniversaryplugin/db" />  
-            <source-file src="src/android/db/User.java" target-dir="src/com/revan/anniversaryplugin/db" />             
+            <source-file src="src/android/db/User.java" target-dir="src/com/revan/anniversaryplugin/db" /> 
+             <source-file src="src/android/db/Anniversary.java" target-dir="src/com/revan/anniversaryplugin/db" />             
         <source-file src="src/android/db/DBReglage.java" target-dir="src/com/revan/anniversaryplugin/db" />
         <source-file src="src/android/lib/Fichier.java" target-dir="src/com/revan/anniversaryplugin/lib" />
 		<source-file src="src/android/lib/Test.java" target-dir="src/com/revan/anniversaryplugin/lib" />	 		

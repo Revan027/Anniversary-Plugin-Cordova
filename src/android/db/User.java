@@ -18,12 +18,10 @@ public final class User extends DAO {
       public static final String COLUMN_NAME = "Name";	
 	public static final String COLUMN_PHONE = "Phone";
 	public static final String COLUMN_STATE = "State";
-      public static final String COLUMN_ID_ANNIVERSARY = "Id_anniversary";
       
       private String Name;
       private String Phone;
       private boolean State;
-      private int Id_Wakeup;
 
       public User(Context context,String name, String phone){
             super(context);   
@@ -35,20 +33,20 @@ public final class User extends DAO {
             super(context);   
       }
 
-      public boolean Add(){
+      public long Add(){
+            long ret = 0;
             try {
                   SQLiteDatabase db = this.getWritableDatabase();
                   ContentValues contentValues = new ContentValues();    
                   contentValues.put(COLUMN_NAME, this.Name);
-                  contentValues.put(COLUMN_PHONE, this.Phone);	
-                  contentValues.put(COLUMN_ID_ANNIVERSARY, 1);		
-                  db.insert(TABLE_NAME, null, contentValues);
+                  contentValues.put(COLUMN_PHONE, this.Phone);		
+                  ret = db.insert(TABLE_NAME, null, contentValues);
                   db.close();
                   
-                  return true;
+                  return ret;
             }
             catch(Exception e) {
-                  return false;
+                  return ret;
             }          
       }
 
@@ -77,7 +75,9 @@ public final class User extends DAO {
             ArrayList<String> array_list = new ArrayList<String>();
             JSONArray array = new JSONArray();     
             SQLiteDatabase db = getWritableDatabase();
-            Cursor cursor = db.rawQuery("SELECT * FROM "+TABLE_NAME, null);
+            Cursor cursor = db.rawQuery("SELECT user.id as id,user.name as name,user.phone as phone,user.state as state,"+
+            "substr(anniv.Date, 1, 11) as date,anniv.DateRappel as dateRappel FROM "+TABLE_NAME+" as user "+
+            "INNER JOIN "+ Anniversary.TABLE_NAME +" as anniv ON anniv.IdUser = user.Id" ,null);
             cursor.moveToFirst();
 
             while (!cursor.isAfterLast()) { 
@@ -87,6 +87,8 @@ public final class User extends DAO {
                         obj.put("name", cursor.getString(1));
                         obj.put("phone", cursor.getString(2));
                         obj.put("state", cursor.getString(3));
+                        obj.put("date", cursor.getString(4));
+                        obj.put("dateRappel", cursor.getString(5));
                         array.put(obj);
                         
                   }catch(JSONException e) {

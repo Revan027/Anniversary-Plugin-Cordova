@@ -44,14 +44,14 @@ public abstract class DAO extends SQLiteOpenHelper {
       public static final String COLUMN_NAME = "Name";	
 	public static final String COLUMN_PHONE = "Phone";
 	public static final String COLUMN_STATE = "State";
-	public static final String COLUMN_ID_ANNIVERSARY = "Id_anniversary";
 
       /****************************************** Table Date ********************************************************************/
       public static final String TABLE_NAME_2 = "anniversary";
       public static final String COLUMN_ID_2  = "Id";
       public static final String COLUMN_DATE  = "Date";	
       public static final String COLUMN_DATE_RAPPEL = "DateRappel";
-
+      public static final String COLUMN_ID_USER = "IdUser";
+      
       /****************************************** Table Option ********************************************************************/
       public static final String TABLE_NAME_3 = "option";
       public static final String COLUMN_ID_3  = "Id";
@@ -59,7 +59,7 @@ public abstract class DAO extends SQLiteOpenHelper {
       public static final String COLUMN_HOUR = "Hour";
 
    
-      String[] allColumns = {COLUMN_ID,COLUMN_NAME,COLUMN_PHONE,COLUMN_STATE,COLUMN_ID_ANNIVERSARY};
+      String[] allColumns = {COLUMN_ID,COLUMN_NAME,COLUMN_PHONE,COLUMN_STATE,COLUMN_ID_USER};
       
      
       /***************** le constructeur parent verifie et appelle si besoin les fonctions onCreate et onUpgrade **********************/
@@ -68,7 +68,12 @@ public abstract class DAO extends SQLiteOpenHelper {
             super(context, DATABASE_NAME, null, DATABASE_VERSION);              
       }
       
-      
+      @Override
+      public void onOpen(SQLiteDatabase db){
+          super.onOpen(db);
+          db.execSQL("PRAGMA foreign_keys=ON;");
+      }
+
 	/***************** création des table si elles n'existent pas **********************/
       @Override
       public void onCreate(SQLiteDatabase db) {
@@ -83,11 +88,12 @@ public abstract class DAO extends SQLiteOpenHelper {
               
             db.insert(TABLE_NAME_3, null, contentValues);
 
-            db.execSQL("create table IF NOT EXISTS "+TABLE_NAME_2+"("+COLUMN_ID_2+"  integer primary key AUTOINCREMENT, "+COLUMN_DATE+" text, "+COLUMN_DATE_RAPPEL+" VARCHAR(400))");
-                  
             db.execSQL("create table IF NOT EXISTS "+TABLE_NAME+"( "+COLUMN_ID+" integer primary key, "+COLUMN_NAME+" text,"+
-                  COLUMN_PHONE+" VARCHAR(400) NOT NULL DEFAULT 'Aucun numéro', "+COLUMN_STATE+" INT(2) NOT NULL DEFAULT 0,"+
-                  COLUMN_ID_ANNIVERSARY+" integer, FOREIGN KEY("+COLUMN_ID_ANNIVERSARY+") REFERENCES " +TABLE_NAME_2+"("+COLUMN_ID_2+") )");           	         
+            COLUMN_PHONE+" VARCHAR(400) NOT NULL DEFAULT 'Aucun numéro', "+COLUMN_STATE+" INT(2) NOT NULL DEFAULT 0)");           	         
+
+            db.execSQL("create table IF NOT EXISTS "+TABLE_NAME_2+"("+COLUMN_ID_2+"  integer primary key AUTOINCREMENT, "+COLUMN_DATE+" DATE, "+COLUMN_DATE_RAPPEL+" DATE, "+
+            COLUMN_ID_USER+" integer, FOREIGN KEY("+COLUMN_ID_USER+") REFERENCES " +TABLE_NAME+"("+COLUMN_ID+") ON DELETE CASCADE)");
+                        	         
       }
       
       
