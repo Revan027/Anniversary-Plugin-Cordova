@@ -170,13 +170,18 @@ public class AlarmPlugin extends CordovaPlugin{
                   else if ("UpdateUserState".equals(action)){
                         HashMap data = new HashMap<>();
                         data.put("State",args.getInt(1));
-                        /*for(int i = 0; i < args.length; i++){
-
-                        }*/
-                      
-                        if(this.user.Update(args.getInt(0),data))  resp = "ok";                     
+ 
+                        if(this.user.UpdateState(args.getInt(0),data))  resp = "ok";                     
                   } 
+                  else if ("UpdateUser".equals(action)){
+                        int id = args.getInt(0);
+                        String name = args.getString(1);
+                        String phone = args.getString(2);
 
+                        this.user = new User(this.cordova.getActivity(),name,phone); 
+    
+                        if(this.user.Update(id))  resp = "ok";                     
+                  } 
                   else if ("AddUser".equals(action)) {			
                         try {						
                               String date =  args.getString(0);

@@ -50,7 +50,7 @@ public final class User extends DAO {
             }          
       }
 
-      public boolean Update (int id,HashMap dataMap) {		
+      public boolean UpdateState (int id,HashMap dataMap) {		
             SQLiteDatabase db = this.getWritableDatabase();
             ContentValues data = new ContentValues();
             Object state = dataMap.get("State");
@@ -59,6 +59,16 @@ public final class User extends DAO {
           
             db.update(TABLE_NAME, data, COLUMN_ID +" = "+id, null);
 
+            return true;
+      }
+
+      public boolean Update (int id) {		
+            SQLiteDatabase db = this.getWritableDatabase();
+            ContentValues data = new ContentValues();
+            data.put(COLUMN_PHONE,this.Phone);
+            data.put(COLUMN_NAME,this.Name);
+          
+            db.update(TABLE_NAME, data, COLUMN_ID +" = "+id, null);
             return true;
       }
 

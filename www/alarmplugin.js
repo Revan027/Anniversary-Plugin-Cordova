@@ -35,6 +35,33 @@ var alarm = {
                   [alarmDate,name,phone]
             );
       },
+      deleteUser: function(tabId, successCallback, errorCallback) {     
+            cordova.exec(
+                successCallback,
+                errorCallback,
+                "AlarmPlugin",
+                "DeleteUser",
+                [tabId]
+            );
+      },
+      updateUser: function(id,name,phone, successCallback, errorCallback) {
+            cordova.exec(
+                  successCallback,
+                  errorCallback,
+                  "AlarmPlugin",
+                  "UpdateUser",
+                  [id,name,phone]
+            );
+      },
+      updateUserState: function(id,data, successCallback, errorCallback) {     
+            cordova.exec(
+            successCallback,
+            errorCallback,
+            "AlarmPlugin",
+            "UpdateUserState",
+            [id,data]
+            );
+      },
       getOptions: function(rien,successCallback, errorCallback) { 
             cordova.exec(
                 successCallback,
@@ -52,25 +79,7 @@ var alarm = {
                   "UpdateOptions",
                   [sms,hour]
             );
-      },
-	deleteUser: function(tabId, successCallback, errorCallback) {     
-        cordova.exec(
-            successCallback,
-            errorCallback,
-            "AlarmPlugin",
-            "DeleteUser",
-            [tabId]
-        );
-      },
-      updateUserState: function(id,data, successCallback, errorCallback) {     
-            cordova.exec(
-            successCallback,
-            errorCallback,
-            "AlarmPlugin",
-            "UpdateUserState",
-            [id,data]
-            );
-      },
+      },	
       searchDate: function(dateSearch,successCallback, errorCallback) { 
             cordova.exec(
                 successCallback,
