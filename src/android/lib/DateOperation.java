@@ -1,16 +1,49 @@
-package com.uniclau.alarmplugin.lib;
+package com.revan.anniversaryplugin.lib;
 
 import java.util.GregorianCalendar;	
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
+import android.util.Log;
 
 public class DateOperation {
 		
-	public DateOperation(){ 
-	
-    } 
-	
+	public DateOperation(){ 	
+      } 
+
+	public static String ConvertToString(Date date){
+            SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+            return sdf.format(date);
+      }
+
+      public static Date ConvertToDate(String date,String format){
+            SimpleDateFormat sdf = new SimpleDateFormat(format);
+            Date newDate = new Date();
+
+            try{
+                  newDate =  sdf.parse(date);
+            } catch(Exception e) {                
+                  System.err.println("Exception: " + e.getMessage());
+            } 
+            return newDate;
+      }
+
+      public static Date AddDay(Date date){
+            Date newDate = new Date();
+            SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm");
+            GregorianCalendar calStr1 = new GregorianCalendar();
+            calStr1.setTime(date); 
+            calStr1.add(GregorianCalendar.DATE, 1); 
+           
+            String dateIncre = sdf.format(calStr1.getTime());
+         
+            try{
+                  newDate =  sdf.parse(dateIncre);
+            } catch(Exception e) {                
+                  System.err.println("Exception: " + e.getMessage());
+            } 
+           return newDate;
+      }
+
 	public String creationRappel(String dateAnniv){
 		
 		SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm");

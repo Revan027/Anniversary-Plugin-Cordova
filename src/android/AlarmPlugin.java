@@ -2,12 +2,7 @@ package com.revan.anniversaryplugin;
 
 import com.revan.anniversaryplugin.db.*;
 import com.revan.anniversaryplugin.lib.*;
-/*import com.uniclau.alarmplugin.WakeUp;
-import com.uniclau.alarmplugin.db.*;
-import com.uniclau.alarmplugin.lib.*;
-import com.uniclau.alarmplugin.alarme.*;
-import com.uniclau.alarmplugin.sms.*;*/
-
+import com.revan.anniversaryplugin.alarme.*;
 import java.text.SimpleDateFormat;
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaPlugin;
@@ -137,8 +132,9 @@ public class AlarmPlugin extends CordovaPlugin{
 		try {			
 			if("Init".equals(action)){		
                         if(this.Init()) resp = "Init ok";
-
                         else resp = "Erreur à l'initialisation de l'application";
+
+                        resp = InitAlarm();
                   }
                   else if("PhoneContacts".equals(action)){	
 				/*int REQUEST_SELECT_CONTACT = 1;
@@ -156,7 +152,6 @@ public class AlarmPlugin extends CordovaPlugin{
 				return true;
                   } 
                   else if ("GetUsers".equals(action)) resp = this.user.GetAll().toString();
-
                   else if ("DeleteUser".equals(action)){
                         String[] tabId =  args.getString(0).split(",");
 
@@ -166,7 +161,6 @@ public class AlarmPlugin extends CordovaPlugin{
                      
                         if(this.user.Delete(tabId))  resp = "ok";
                   } 
-
                   else if ("UpdateUserState".equals(action)){
                         HashMap data = new HashMap<>();
                         data.put("State",args.getInt(1));
@@ -188,47 +182,56 @@ public class AlarmPlugin extends CordovaPlugin{
                               String name = args.getString(1);
                               String phone = args.getString(2);
                               String hour = "";
+                              Date obDate = DateOperation.ConvertToDate(date,"dd-MM-yyyy");
+
                               JSONArray jsonOption = this.option.GetAll();
                               for (int i=0; i < jsonOption.length(); i++) {
                                     JSONObject obj = jsonOption.getJSONObject(i);
                                     hour =  obj.get("hour").toString();
                               }                           
                               String fullDate = date + " " + hour;//date complete
-                              
-                              SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
-                              Date obDate = sdf.parse(fullDate);
-                              
-                              if(obDate.before(new Date())){
-                                    resp = "La date est déja passée";
-                              }else{      
+                                                                      
+                              if(obDate.before( new Date())) resp = "La date est passée !";
+                              else{      
+                                   
+
                                     this.user = new User(this.cordova.getActivity(),name,phone); 
                                     long id = this.user.Add();
 
-                                    this.anniversary = new Anniversary(this.cordova.getActivity(),fullDate,fullDate,id); 
+                                    this.anniversary = new Anniversary(this.cordova.getActivity(),obDate,obDate,id); 
                                     this.anniversary.Add();
-                                    resp =  date; 
+
+                                    resp = "h";
                               }  
                         } catch(Exception e) {	
                               callbackContext.error(e.getMessage());
-
                               return false;
                         }                      	
                   } 
-                  else if ("GetOptions".equals(action))  resp = this.option.GetAll().toString();	
-                  
+                  else if ("GetOptions".equals(action))  resp = this.option.GetAll().toString();	                 
                   else if ("UpdateOptions".equals(action)) {
+                        String sms = args.getString(0);
+                        String hour = args.getString(1);
+                      
                         try {	
-                              if(this.option.Update( args.getString(0), args.getString(1))) resp = "Mise à jour effectuée";						
+                              if(this.option.Update( sms, hour)){                          		
+                                    String date = DateOperation.ConvertToString(new Date()) +" "+ hour;
+                                    IntentCreation intentC = new IntentCreation(date,this.cordova.getActivity()); 
+                                    Alarme alarm = new Alarme(intentC.Create(),this.cordova.getActivity());	
+                                    alarm.Update();
+
+                                    resp = "Mise à jour effectuée";	
+                              }					
             
                         } catch(Exception e) {	
                               callbackContext.error(e.getMessage());
-
                               return false;
                         }         	
                   }
                   else if ("SearchDate".equals(action)) {
                         try {	
                               String dateSearch =  args.getString(0);
+      
                               resp = this.anniversary.GetByDate(dateSearch).toString();
 
                         } catch(Exception e) {	
@@ -256,6 +259,7 @@ public class AlarmPlugin extends CordovaPlugin{
 
             NotificationCreation nc = new NotificationCreation(this.cordova.getActivity());// init channel
             nc.CreateNotificationChannel();
+            
 
             return true;
 				//callbackContext.success(dbHelper.patch2());
@@ -282,5 +286,14 @@ public class AlarmPlugin extends CordovaPlugin{
 					
 					callbackContext.error("Erreur lors de la création du fichier");
 				}*/
-	}                 
+      } 
+      
+      private String InitAlarm(){
+            String hour = ParseJson.GetHour(this.option);        
+            String date = DateOperation.ConvertToString(new Date()) +" "+ hour;
+            IntentCreation intentC = new IntentCreation(date,this.cordova.getActivity());           
+            Alarme alarm = new Alarme(intentC.Create(),this.cordova.getActivity());				
+
+            return alarm.Create();
+      }
 }	

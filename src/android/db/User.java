@@ -41,8 +41,7 @@ public final class User extends DAO {
                   contentValues.put(COLUMN_NAME, this.Name);
                   contentValues.put(COLUMN_PHONE, this.Phone);		
                   ret = db.insert(TABLE_NAME, null, contentValues);
-                  db.close();
-                  
+                  db.close();                 
                   return ret;
             }
             catch(Exception e) {
@@ -58,7 +57,6 @@ public final class User extends DAO {
             if(state != null)  data.put(COLUMN_STATE,(int)state);
           
             db.update(TABLE_NAME, data, COLUMN_ID +" = "+id, null);
-
             return true;
       }
 
@@ -76,8 +74,7 @@ public final class User extends DAO {
             SQLiteDatabase db = this.getWritableDatabase();
             String idsCSV = TextUtils.join(",", tabId);
 		db.delete(TABLE_NAME, "Id IN (" + idsCSV + ")", null); 
-            db.close();   
-            
+            db.close();            
             return true;
       }
 

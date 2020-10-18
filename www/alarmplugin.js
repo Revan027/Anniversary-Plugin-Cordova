@@ -89,48 +89,5 @@ var alarm = {
                 [dateSearch]
             );
       },
-	modif: function(tabId,new_name,new_num_tel, successCallback, errorCallback) {
-       
-        cordova.exec(
-            successCallback,
-            errorCallback,
-            "AlarmPlugin",
-            "programModif",
-            [tabId,new_name,new_num_tel]
-        );
-    },
-   
-    modifTextSms: function(texte,successCallback, errorCallback) {
-       
-        cordova.exec(
-            successCallback,
-            errorCallback,
-            "AlarmPlugin",
-            "modifTextSms",
-            [texte]
-        );
-    },
-    
-    modifEtat: function(id,etat,successCallback, errorCallback) {
-       
-        cordova.exec(
-            successCallback,
-            errorCallback,
-            "AlarmPlugin",
-            "modifEtat",
-            [id,etat]
-        );
-    }, 
-	modifHeure: function(heure,successCallback, errorCallback) {
-       
-        cordova.exec(
-            successCallback,
-            errorCallback,
-            "AlarmPlugin",
-            "modifHeure",
-            [heure]
-        );
-    }
-	
 };
 module.exports = alarm;

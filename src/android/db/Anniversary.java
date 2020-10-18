@@ -11,6 +11,7 @@ import org.json.JSONException;
 import android.content.ContentValues;
 import android.text.TextUtils;
 import java.util.HashMap;
+import com.revan.anniversaryplugin.lib.DateOperation;
 
 public final class Anniversary extends DAO {
       public static final String TABLE_NAME = "anniversary";
@@ -19,11 +20,11 @@ public final class Anniversary extends DAO {
       public static final String COLUMN_DATE_RAPPEL = "DateRappel";
       public static final String COLUMN_ID_USER = "IdUser";
 
-      private String Date;
-      private String DateRappel;
+      private Date Date;
+      private Date DateRappel;
       private long IdUser;
 
-      public Anniversary(Context context,String date, String dateRappel,long idUser){
+      public Anniversary(Context context,Date date, Date dateRappel,long idUser){
             super(context);   
             this.Date = date;
             this.DateRappel = dateRappel;   
@@ -39,8 +40,8 @@ public final class Anniversary extends DAO {
             try {
                   SQLiteDatabase db = this.getWritableDatabase();
                   ContentValues contentValues = new ContentValues();    
-                  contentValues.put(COLUMN_DATE,  this.Date);
-                  contentValues.put(COLUMN_DATE_RAPPEL,this.DateRappel);
+                  contentValues.put(COLUMN_DATE, DateOperation.ConvertToString(this.Date));
+                  contentValues.put(COLUMN_DATE_RAPPEL,DateOperation.ConvertToString(this.DateRappel));
                   contentValues.put(COLUMN_ID_USER,this.IdUser);		
                   ret = db.insert(TABLE_NAME, null, contentValues);
                   db.close();
@@ -56,7 +57,7 @@ public final class Anniversary extends DAO {
             ArrayList<String> array_list = new ArrayList<String>();
             JSONArray array = new JSONArray();     
             SQLiteDatabase db = getWritableDatabase();
-            String query = "SELECT user.id as id, user.name as name, substr(anniv.Date, 1, 10) as date FROM "+TABLE_NAME+" as anniv "+
+            String query = "SELECT user.id as id, user.name as name, anniv.Date as date FROM "+TABLE_NAME+" as anniv "+
             "INNER JOIN "+ User.TABLE_NAME +" as user ON user.Id = anniv.IdUser WHERE user.Id IN "+
             "(SELECT IdUser FROM "+TABLE_NAME+" WHERE substr(anniv.Date, 4, 7) LIKE '"+dateSearch+"')";
 

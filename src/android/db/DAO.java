@@ -1,6 +1,5 @@
 package com.revan.anniversaryplugin.db;
 
-import com.uniclau.alarmplugin.lib.Fichier;
 import com.uniclau.alarmplugin.lib.*;
 
 import java.util.ArrayList;
@@ -63,8 +62,7 @@ public abstract class DAO extends SQLiteOpenHelper {
       
      
       /***************** le constructeur parent verifie et appelle si besoin les fonctions onCreate et onUpgrade **********************/
-      public DAO(Context context ) {	
-            
+      public DAO(Context context ) {	         
             super(context, DATABASE_NAME, null, DATABASE_VERSION);              
       }
       
@@ -349,8 +347,7 @@ public abstract class DAO extends SQLiteOpenHelper {
 		  }
 		cursor.close();
 		db.close();
-		Test fi=new Test(array_list);
-		fi.createJSON();
+
 		return array_list;
     }	
 
