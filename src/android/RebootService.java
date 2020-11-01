@@ -123,7 +123,7 @@ public class RebootService extends Service {
 		}
 		
 		this.stopSelf(startId); 
-		//super.onStartCommand(intent, flags, startId);		
+z	
 		return Service.START_REDELIVER_INTENT;
 	}
 }

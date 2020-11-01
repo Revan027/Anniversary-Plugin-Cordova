@@ -21,35 +21,50 @@
 		
 		<!-- intents pointant sur l'activité main -->
 		<config-file target="AndroidManifest.xml" parent="/manifest/application/activity">
-            <intent-filter>
-                <action android:name="com.revan.anniversaryplugin.ALARM" />
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </config-file>
-		
+                  <intent-filter>
+                        <action android:name="com.revan.anniversaryplugin.ALARM" />
+                        <category android:name="android.intent.category.DEFAULT" />
+                  </intent-filter>                
+            </config-file>
+
+		<!-- declaration de l'activité WakeUp -->
+		<config-file target="AndroidManifest.xml" parent="/manifest/application">
+			<activity android:label="Memory-aid" 
+                        android:name="com.revan.anniversaryplugin.activity.WakeUp" 
+                        android:showOnLockScreen="true" 
+                        android:showWhenLocked="true"
+                        android:turnScreenOn="true"
+                        android:screenOrientation="sensorPortrait" >
+                        <intent-filter>
+                              <action android:name="android.intent.action.VIEW" />
+                              <category android:name="android.intent.category.DEFAULT" />
+                        </intent-filter>
+                  </activity>
+		</config-file>
+
 		<!-- service -->
 		<config-file target="AndroidManifest.xml" parent="/manifest/application">
-			<service android:name="com.revan.anniversaryplugin.RebootService"  android:enabled="true"/>
+			<service android:name="com.revan.anniversaryplugin.RebootService" android:enabled="true"/>
 		</config-file>
-			
-		<!-- declaration de l'activité 2 -->
-		<config-file target="AndroidManifest.xml" parent="/manifest/application">
-			<activity android:label="Memory-aid" android:name="com.revan.anniversaryplugin.WakeUp" android:showOnLockScreen="true" android:screenOrientation="sensorPortrait" ></activity>
+            <config-file target="AndroidManifest.xml" parent="/manifest/application">
+			<service android:name="com.revan.anniversaryplugin.service.AlarmReceiverService" android:enabled="true"/>
 		</config-file>
-	
-		<!-- declaration des permissions pour utiliser les fonctionallitée -->
-        <config-file target="AndroidManifest.xml" parent="/manifest">
-            <uses-permission android:name="android.permission.WAKE_LOCK" />
-            <uses-permission android:name="android.permission.DISABLE_KEYGUARD" />
+				
+		<!-- declaration des permissions pour utiliser les fonctionnalitées du portable -->
+            <config-file target="AndroidManifest.xml" parent="/manifest">
+                  <uses-permission android:name="android.permission.WAKE_LOCK" />
+                  <uses-permission android:name="android.permission.DISABLE_KEYGUARD" />
 			<uses-permission android:name="android.permission.READ_CONTACTS" />
-            <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-            <uses-permission android:name="android.permission.VIBRATE"/>
+                  <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+                  <uses-permission android:name="android.permission.VIBRATE"/>
 			<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 			<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 			<uses-permission android:name="android.permission.SEND_SMS"/>
 			<uses-permission android:name="android.permission.RECEIVE_SMS"/>
 			<uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
-        </config-file>
+                  <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT" />
+                    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+            </config-file>
 
 		<!-- declaration des Broadcast Receiver -->
         <config-file target="AndroidManifest.xml" parent="/manifest/application">
@@ -74,10 +89,22 @@
                 </intent-filter>
             </receiver>		
         </config-file>
+
+      <!-- src activity -->
+      <source-file src="src/android/activity/WakeUp.java" target-dir="src/com/revan/anniversaryplugin/activity" />
+
+	<!-- src service -->
+      <source-file src="src/android/service/AlarmReceiverService.java" target-dir="src/com/revan/anniversaryplugin/service" /> 
+      <source-file src="src/android/service/NotificationService.java" target-dir="src/com/revan/anniversaryplugin/service" /> 
+
+      <!-- src layout -->
+      <source-file src="src/android/res/layout/wake_up_activity.xml" target-dir="res/layout"/>
+	<source-file src="src/android/res/drawable/buttonshape.xml" target-dir="res/drawable"/>
+
+      <!-- src lib -->
+      <source-file src="src/android/AlarmPlugin.java" target-dir="src/com/revan/anniversaryplugin" />  
+      
 		
-        <source-file src="src/android/AlarmPlugin.java" target-dir="src/com/revan/anniversaryplugin" />  
-		<source-file src="src/android/res/layout/wake_up_activity.xml" target-dir="res/layout"/>
-		<source-file src="src/android/res/drawable/buttonshape.xml" target-dir="res/drawable"/>			
 	<source-file src="src/android/alarme/Alarme.java" target-dir="src/com/revan/anniversaryplugin/alarme" /> 
         <source-file src="src/android/alarme/IntentCreation.java" target-dir="src/com/revan/anniversaryplugin/alarme" />
             <source-file src="src/android/broadcast/AlarmReceiver.java" target-dir="src/com/revan/anniversaryplugin/broadcast" /> 	
@@ -89,6 +116,6 @@
 		<source-file src="src/android/lib/DateOperation.java" target-dir="src/com/revan/anniversaryplugin/lib" />
             <source-file src="src/android/lib/ParseJson.java" target-dir="src/com/revan/anniversaryplugin/lib" />         
 		<source-file src="src/android/lib/SingletonServiceManager.java" target-dir="src/com/revan/anniversaryplugin/lib" />			
-						
+		
      </platform>          
 </plugin>

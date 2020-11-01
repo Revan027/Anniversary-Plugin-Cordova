@@ -14,7 +14,7 @@ import android.app.NotificationChannel;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.widget.Toast;
-
+import com.revan.anniversaryplugin.activity.*;
 
 public class NotificationCreation{
 	
@@ -90,7 +90,10 @@ public class NotificationCreation{
 	public Notification startForegroundNotification() {
 		
 		this.CreateNotificationChannel();
-		
+            Intent fullScreenIntent = new Intent(this.context, WakeUp.class);
+            fullScreenIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK ); 
+            fullScreenIntent.putExtra("nom","ddd");
+            PendingIntent fullScreenPendingIntent = PendingIntent.getActivity(this.context, 2,fullScreenIntent,0);
 		Notification.Builder builder;
 		
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -101,15 +104,47 @@ public class NotificationCreation{
 		
 		Resources r = context.getResources();
         int resourceId = r.getIdentifier("ic_memory", "drawable", context.getPackageName());
-		builder.setContentTitle(this.titre);	//titre
-		builder.setContentText(this.message);	//contenu
+        builder.setContentTitle("Incoming call");
+        builder.setContentText("(919) 555-1234");
+        builder.setPriority(Notification.PRIORITY_HIGH);
+        builder.setCategory(Notification.CATEGORY_CALL);
 		builder.setSmallIcon(resourceId);	//icone
-		builder.setAutoCancel(true);	//ferme la notification lors de l'appuie
-					
-		NotificationManager notifManager = (NotificationManager)
+            builder.setFullScreenIntent(fullScreenPendingIntent, true);
+
+
+		/*NotificationManager notifManager = (NotificationManager)
+		this.context.getSystemService(Context.NOTIFICATION_SERVICE);*/
+
+            /*NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+               manager.notify(1, notification.build());*/
+            //Notification notification = builder.getNotification();
+            NotificationManager notifManager = (NotificationManager)
 		this.context.getSystemService(Context.NOTIFICATION_SERVICE);
 
 		Notification notification = builder.getNotification();
+		notifManager.notify(1 , notification);	
+
 		return notification;
-	}   
+      }   
+      
+      public Notification test(){
+           /*this.CreateNotificationChannel();
+
+            Intent fullScreenIntent = new Intent(this.context, WakeUp.class);
+            fullScreenIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK ); 
+            fullScreenIntent.putExtra("nom","ddd");
+            PendingIntent fullScreenPendingIntent = PendingIntent.getActivity(this.context, 2,fullScreenIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+            NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this.context, "memory-aid")
+            .setSmallIcon(R.drawable.ic_call_green)
+            .setContentTitle("Incoming call")
+            .setContentText("(919) 555-1234")
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
+            .setCategory(NotificationCompat.CATEGORY_CALL)
+            .setFullScreenIntent(fullScreenPendingIntent, true);
+
+            Notification incomingCallNotification = notificationBuilder.build();
+            return incomingCallNotification;*/
+   return null;
+      }
 }
