@@ -25,7 +25,8 @@ public final class Anniversary extends DAO {
       private long IdUser;
 
       public Anniversary(Context context,Date date, Date dateRappel,long idUser){
-            super(context);   
+            super(context);  
+
             this.Date = date;
             this.DateRappel = dateRappel;   
             this.IdUser = idUser; 
@@ -69,7 +70,38 @@ public final class Anniversary extends DAO {
                         JSONObject obj = new JSONObject();
                         obj.put("id", cursor.getInt(0));
                         obj.put("name", cursor.getString(1));
-                        obj.put("date", cursor.getString(2));
+                        obj.put("date", cursor.getString(2)); 
+                        array.put(obj);
+                        
+                  }catch(JSONException e) {
+                        System.err.println("Exception: " + e.getMessage());
+                  }
+                  cursor.moveToNext();
+            }
+            cursor.close();
+            return array;
+      }
+
+      public JSONArray GetByCompleteDate(String dateSearch){
+            ArrayList<String> array_list = new ArrayList<String>();
+            JSONArray array = new JSONArray();     
+            SQLiteDatabase db = getWritableDatabase();
+            String query = "SELECT user.id as id, user.name as name, user.phone as phone, anniv.date as dateAnniv,user.state as state FROM "+TABLE_NAME+" as anniv "+
+            "INNER JOIN "+ User.TABLE_NAME +" as user ON user.Id = anniv.IdUser WHERE user.Id IN "+
+            "(SELECT IdUser FROM "+TABLE_NAME+" WHERE anniv.DateRappel LIKE ?)";
+
+            Cursor cursor = db.rawQuery(query, new String[] {"dateSearch"}); 
+            cursor.moveToFirst();
+
+            while (!cursor.isAfterLast()) { 
+                  try {	
+                        JSONObject obj = new JSONObject();
+                        obj.put("id", cursor.getInt(0));
+                        obj.put("name", cursor.getString(1));
+                        obj.put("phone", cursor.getString(2));
+                        obj.put("dateAnniv", cursor.getString(3)); 
+                        obj.put("state", cursor.getString(4)); 
+                        obj.put("date", cursor.getString(5)); 
                         array.put(obj);
                         
                   }catch(JSONException e) {

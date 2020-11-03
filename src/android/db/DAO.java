@@ -39,23 +39,25 @@ public abstract class DAO extends SQLiteOpenHelper {
 
       /****************************************** Table Utilisateur********************************************************************/
       public static final String TABLE_NAME = "user";
-      public static final String COLUMN_ID = "Id";
-      public static final String COLUMN_NAME = "Name";	
-	public static final String COLUMN_PHONE = "Phone";
-	public static final String COLUMN_STATE = "State";
+      public static final String COLUMN_ID = "id";
+      public static final String COLUMN_NAME = "name";	
+      public static final String COLUMN_PHONE = "phone";
+      public static final String COLUMN_DATE_ANNIV  = "dateAnniv";	
+      public static final String COLUMN_DATE_RAPPEL = "dateRappel";
+	public static final String COLUMN_STATE = "state";
 
       /****************************************** Table Date ********************************************************************/
-      public static final String TABLE_NAME_2 = "anniversary";
-      public static final String COLUMN_ID_2  = "Id";
-      public static final String COLUMN_DATE  = "Date";	
-      public static final String COLUMN_DATE_RAPPEL = "DateRappel";
+      public static final String TABLE_NAME_3 = "anniversary";
+      public static final String COLUMN_ID_3  = "Id";
+      public static final String COLUMN_DATE_2  = "Date";	
+      public static final String COLUMN_DATE_RAPPEL_2= "DateRappel";
       public static final String COLUMN_ID_USER = "IdUser";
       
       /****************************************** Table Option ********************************************************************/
-      public static final String TABLE_NAME_3 = "option";
-      public static final String COLUMN_ID_3  = "Id";
-      public static final String COLUMN_TEXT  = "Text";	
-      public static final String COLUMN_HOUR = "Hour";
+      public static final String TABLE_NAME_2 = "option";
+      public static final String COLUMN_ID_2  = "Id";
+      public static final String COLUMN_TEXT  = "text";	
+      public static final String COLUMN_HOUR = "hour";
 
    
       String[] allColumns = {COLUMN_ID,COLUMN_NAME,COLUMN_PHONE,COLUMN_STATE,COLUMN_ID_USER};
@@ -75,8 +77,7 @@ public abstract class DAO extends SQLiteOpenHelper {
 	/***************** création des table si elles n'existent pas **********************/
       @Override
       public void onCreate(SQLiteDatabase db) {
-
-            db.execSQL("create table IF NOT EXISTS " +TABLE_NAME_3+"("+COLUMN_ID_3+" integer primary key AUTOINCREMENT,"+ 
+            db.execSQL("create table IF NOT EXISTS " +TABLE_NAME_2+"("+COLUMN_ID_2+" integer primary key AUTOINCREMENT,"+ 
                   COLUMN_TEXT+" text VARCHAR(400) NOT NULL,"+
                   COLUMN_HOUR+" text VARCHAR(5) NOT NULL)");
 
@@ -84,14 +85,10 @@ public abstract class DAO extends SQLiteOpenHelper {
             contentValues.put(COLUMN_TEXT, "Joyeux anniversaire nom");	
             contentValues.put(COLUMN_HOUR, "09:00");	
               
-            db.insert(TABLE_NAME_3, null, contentValues);
+            db.insert(TABLE_NAME_2, null, contentValues);
 
             db.execSQL("create table IF NOT EXISTS "+TABLE_NAME+"( "+COLUMN_ID+" integer primary key, "+COLUMN_NAME+" text,"+
-            COLUMN_PHONE+" VARCHAR(400) NOT NULL DEFAULT 'Aucun numéro', "+COLUMN_STATE+" INT(2) NOT NULL DEFAULT 0)");           	         
-
-            db.execSQL("create table IF NOT EXISTS "+TABLE_NAME_2+"("+COLUMN_ID_2+"  integer primary key AUTOINCREMENT, "+COLUMN_DATE+" DATE, "+COLUMN_DATE_RAPPEL+" DATE, "+
-            COLUMN_ID_USER+" integer, FOREIGN KEY("+COLUMN_ID_USER+") REFERENCES " +TABLE_NAME+"("+COLUMN_ID+") ON DELETE CASCADE)");
-                        	         
+                  COLUMN_PHONE+" VARCHAR(400) NOT NULL DEFAULT 'Aucun numéro',"+COLUMN_DATE_ANNIV+" DATE, "+COLUMN_DATE_RAPPEL+" DATE, "+COLUMN_STATE+" INT(2) NOT NULL DEFAULT 0)");           	                        	         
       }
       
       
@@ -189,7 +186,7 @@ public abstract class DAO extends SQLiteOpenHelper {
 	/***************** update de l'heure **********************/
     public boolean updateHeure (String nouvelle_heure, String heure_remplace) {
 		
-		SQLiteDatabase db = this.getWritableDatabase();
+	/*	SQLiteDatabase db = this.getWritableDatabase();
 		db.execSQL("UPDATE "+ TABLE_NAME +" SET "+COLUMN_DATE+" = replace("+COLUMN_DATE+", "+"'"+heure_remplace+"'"+","+"'"+nouvelle_heure+"'"+") WHERE date LIKE '%"+heure_remplace+"'");
 		db.close();
 		
@@ -197,7 +194,7 @@ public abstract class DAO extends SQLiteOpenHelper {
 		db.execSQL("UPDATE "+ TABLE_NAME +" SET "+COLUMN_DATE_RAPPEL+" = replace("+COLUMN_DATE_RAPPEL+", "+"'"+heure_remplace+"'"+","+"'"+nouvelle_heure+"'"+") WHERE date_rappel LIKE '%"+heure_remplace+"'");
 		db.close();
 		
-		this.callFichier();	
+		this.callFichier();*/	
         return  true;
     }
 	
@@ -218,7 +215,7 @@ public abstract class DAO extends SQLiteOpenHelper {
 	/***************** update la nouvelle date d'anniversaire **********************/
     public boolean update (String date, int id, String dateRappel) {
 		
-        SQLiteDatabase db = this.getWritableDatabase();
+       /* SQLiteDatabase db = this.getWritableDatabase();
 		ContentValues data=new ContentValues();
 		
 		data.put(COLUMN_DATE,date);
@@ -232,7 +229,7 @@ public abstract class DAO extends SQLiteOpenHelper {
 		db.update(TABLE_NAME, data, COLUMN_ID +" = "+id, null);
 		db.close();
 		
-		this.callFichier();
+		this.callFichier();*/
 		
         return true;
     }
@@ -277,18 +274,6 @@ public abstract class DAO extends SQLiteOpenHelper {
 		this.callFichier();
         return true;
     }*/
-	
-	
-	/***************** delete un anniversaire **********************/
-	public void delete (String[] whereArgs) {		
-	
-        SQLiteDatabase db = this.getWritableDatabase();
-		String idsCSV = TextUtils.join(",", whereArgs);
-		db.delete(TABLE_NAME, "id IN (" + idsCSV + ")", null); 
-		db.close();
-		
-		this.callFichier();
-	}
 	
 	
 	

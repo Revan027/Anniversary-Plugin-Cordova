@@ -1,8 +1,10 @@
 package com.revan.anniversaryplugin;
 
+import com.revan.anniversaryplugin.model.*;
 import com.revan.anniversaryplugin.db.*;
 import com.revan.anniversaryplugin.lib.*;
 import com.revan.anniversaryplugin.alarme.*;
+import com.revan.anniversaryplugin.service.*;
 import java.text.SimpleDateFormat;
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaPlugin;
@@ -49,30 +51,23 @@ import android.graphics.Color;
 import android.widget.Toast;
 import org.apache.cordova.PluginResult;
 import java.util.HashMap;
-import java.util.Date;
+
 
 /***************** classe liant avec l'interface **********************/
 public class AlarmPlugin extends CordovaPlugin{
 
-      public static final int RESULT_OK=-1;
-      private CallbackContext callback  = null;
-      public Option option = null;
-      public User user = null;
-      public Anniversary anniversary = null;
-      
-      
+      public static final int RESULT_OK = -1;
+      private CallbackContext callback = null;
+      private Option option = null;
+      private UserService userServ = null;
+          
       @Override
-	public void onPause(boolean multitasking) {
-		
-		Log.d("AlarmPlugin", "onPause");
+	public void onPause(boolean multitasking) {	
 		super.onPause(multitasking);
 	}
 
-
 	@Override
-	public void onResume(boolean multitasking) {
-		
-		Log.d("AlarmPlugin", "onResume " );
+	public void onResume(boolean multitasking) {		
 		super.onResume(multitasking);
 		
 		PowerManager pm = (PowerManager)this.cordova.getActivity().getSystemService(Context.POWER_SERVICE);
@@ -85,7 +80,6 @@ public class AlarmPlugin extends CordovaPlugin{
 
       }
       
-
 	public void onRestoreStateForActivityResult(Bundle state, CallbackContext callbackContext) {
             this.callback = callbackContext;
       }
@@ -151,7 +145,8 @@ public class AlarmPlugin extends CordovaPlugin{
 
 				return true;
                   } 
-                  else if ("GetUsers".equals(action)) resp = this.user.GetAll().toString();
+                  else if ("GetUsers".equals(action)) resp =  this.userServ.getAllInJSON();
+
                   else if ("DeleteUser".equals(action)){
                         String[] tabId =  args.getString(0).split(",");
 
@@ -159,22 +154,25 @@ public class AlarmPlugin extends CordovaPlugin{
 					tabId[i] = tabId[i].replaceAll("[^0-9,A-Z]", "");     //retrait des caractères spéciaux ([])
 				}
                      
-                        if(this.user.Delete(tabId))  resp = "ok";
+                        if(this.userServ.delete(tabId))  resp = "ok";
                   } 
                   else if ("UpdateUserState".equals(action)){
-                        HashMap data = new HashMap<>();
-                        data.put("State",args.getInt(1));
- 
-                        if(this.user.UpdateState(args.getInt(0),data))  resp = "ok";                     
+                        int idUser = args.getInt(0);
+                        boolean state = args.getInt(1) == 1 ? true : false;
+                        User user = this.userServ.getById(idUser);
+
+                        user.setState(state);
+   
+                        if(this.userServ.update(user,idUser))  resp = "ok";                     
                   } 
                   else if ("UpdateUser".equals(action)){
                         int id = args.getInt(0);
                         String name = args.getString(1);
                         String phone = args.getString(2);
 
-                        this.user = new User(this.cordova.getActivity(),name,phone); 
+                       // this.user = new User(this.cordova.getActivity(),name,phone); 
     
-                        if(this.user.Update(id))  resp = "ok";                     
+                        //if(this.user.Update(id))  resp = "ok";                     
                   } 
                   else if ("AddUser".equals(action)) {			
                         try {						
@@ -183,6 +181,7 @@ public class AlarmPlugin extends CordovaPlugin{
                               String phone = args.getString(2);
                               String hour = "";
                               Date obDate = DateOperation.ConvertToDate(date,"dd-MM-yyyy");
+                              Date dateRapel = DateOperation.ConvertToDate("01/11/2020","dd-MM-yyyy");
 
                               JSONArray jsonOption = this.option.GetAll();
                               for (int i=0; i < jsonOption.length(); i++) {
@@ -192,16 +191,12 @@ public class AlarmPlugin extends CordovaPlugin{
                               String fullDate = date + " " + hour;//date complete
                                                                       
                               if(obDate.before( new Date())) resp = "La date est passée !";
-                              else{      
-                                   
 
-                                    this.user = new User(this.cordova.getActivity(),name,phone); 
-                                    long id = this.user.Add();
+                              else{                                   
+                                    User user = new User(name,phone,obDate,dateRapel,false); 
+                                    this.userServ.add(user);
 
-                                    this.anniversary = new Anniversary(this.cordova.getActivity(),obDate,obDate,id); 
-                                    this.anniversary.Add();
-
-                                    resp = "h";
+                                    resp = "ok";
                               }  
                         } catch(Exception e) {	
                               callbackContext.error(e.getMessage());
@@ -230,9 +225,8 @@ public class AlarmPlugin extends CordovaPlugin{
                   }
                   else if ("SearchDate".equals(action)) {
                         try {	
-                              String dateSearch =  args.getString(0);
-      
-                              resp = this.anniversary.GetByDate(dateSearch).toString();
+                              String dateSearch = args.getString(0);  
+                              resp = this.userServ.searchMonthAnniv(dateSearch);
 
                         } catch(Exception e) {	
                               callbackContext.error(e.getMessage());
@@ -252,10 +246,10 @@ public class AlarmPlugin extends CordovaPlugin{
 
 
       /***************** Initialisation de l'application (channel de notification) **********************/
-      private boolean Init(){
+      private boolean Init(){ 
             this.option = new Option(this.cordova.getActivity());
-            this.user = new User(this.cordova.getActivity());           
-            this.anniversary = new Anniversary(this.cordova.getActivity());
+            this.userServ = new UserService(this.cordova.getActivity());  
+           
 
             NotificationCreation nc = new NotificationCreation(this.cordova.getActivity());// init channel
             nc.CreateNotificationChannel();

@@ -24,7 +24,7 @@ public final class Option extends DAO  {
             ArrayList<String> array_list = new ArrayList<String>();
             JSONArray array = new JSONArray();              
             SQLiteDatabase db = this.getWritableDatabase();
-            Cursor cursor = db.rawQuery("SELECT "+COLUMN_TEXT+", "+COLUMN_HOUR+" FROM "+TABLE_NAME_3, null);
+            Cursor cursor = db.rawQuery("SELECT "+COLUMN_TEXT+", "+COLUMN_HOUR+" FROM "+TABLE_NAME_2, null);
             cursor.moveToFirst();
 
             while (!cursor.isAfterLast()) { 

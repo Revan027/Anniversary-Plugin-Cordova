@@ -94,12 +94,20 @@
       <source-file src="src/android/activity/WakeUp.java" target-dir="src/com/revan/anniversaryplugin/activity" />
 
 	<!-- src service -->
+       <source-file src="src/android/service/UserService.java" target-dir="src/com/revan/anniversaryplugin/service" /> 
       <source-file src="src/android/service/AlarmReceiverService.java" target-dir="src/com/revan/anniversaryplugin/service" /> 
       <source-file src="src/android/service/NotificationService.java" target-dir="src/com/revan/anniversaryplugin/service" /> 
 
       <!-- src layout -->
       <source-file src="src/android/res/layout/wake_up_activity.xml" target-dir="res/layout"/>
 	<source-file src="src/android/res/drawable/buttonshape.xml" target-dir="res/drawable"/>
+
+      <!-- src model -->
+      <source-file src="src/android/model/User.java" target-dir="src/com/revan/anniversaryplugin/model" /> 
+
+      
+       <!-- src db -->
+      <source-file src="src/android/db/UserRepository.java" target-dir="src/com/revan/anniversaryplugin/db" /> 
 
       <!-- src lib -->
       <source-file src="src/android/AlarmPlugin.java" target-dir="src/com/revan/anniversaryplugin" />  
@@ -109,9 +117,7 @@
         <source-file src="src/android/alarme/IntentCreation.java" target-dir="src/com/revan/anniversaryplugin/alarme" />
             <source-file src="src/android/broadcast/AlarmReceiver.java" target-dir="src/com/revan/anniversaryplugin/broadcast" /> 	
             <source-file src="src/android/db/DAO.java" target-dir="src/com/revan/anniversaryplugin/db" />
-            <source-file src="src/android/db/Option.java" target-dir="src/com/revan/anniversaryplugin/db" />  
-            <source-file src="src/android/db/User.java" target-dir="src/com/revan/anniversaryplugin/db" /> 
-             <source-file src="src/android/db/Anniversary.java" target-dir="src/com/revan/anniversaryplugin/db" />             		
+            <source-file src="src/android/db/Option.java" target-dir="src/com/revan/anniversaryplugin/db" />               		
 		<source-file src="src/android/lib/NotificationCreation.java" target-dir="src/com/revan/anniversaryplugin/lib" />
 		<source-file src="src/android/lib/DateOperation.java" target-dir="src/com/revan/anniversaryplugin/lib" />
             <source-file src="src/android/lib/ParseJson.java" target-dir="src/com/revan/anniversaryplugin/lib" />         
