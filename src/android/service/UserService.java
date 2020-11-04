@@ -5,11 +5,6 @@ import java.util.Date;
 import android.content.Context;
 
 public final class UserService {       
-      private String Name;
-      private String Phone;
-      private Date DateAnniv;
-      private Date DateRappel;
-      private boolean State;
       private UserRepository UserRepository;
 
       public UserService(Context context){

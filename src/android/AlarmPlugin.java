@@ -58,7 +58,7 @@ public class AlarmPlugin extends CordovaPlugin{
 
       public static final int RESULT_OK = -1;
       private CallbackContext callback = null;
-      private Option option = null;
+      private OptionService optionServ = null;
       private UserService userServ = null;
           
       @Override
@@ -126,6 +126,7 @@ public class AlarmPlugin extends CordovaPlugin{
 		try {			
 			if("Init".equals(action)){		
                         if(this.Init()) resp = "Init ok";
+
                         else resp = "Erreur à l'initialisation de l'application";
 
                         resp = InitAlarm();
@@ -145,13 +146,13 @@ public class AlarmPlugin extends CordovaPlugin{
 
 				return true;
                   } 
-                  else if ("GetUsers".equals(action)) resp =  this.userServ.getAllInJSON();
+                  else if ("GetUsers".equals(action)) resp = this.userServ.getAllInJSON();
 
                   else if ("DeleteUser".equals(action)){
                         String[] tabId =  args.getString(0).split(",");
 
                         for(int i = 0; i < tabId.length;i++){
-					tabId[i] = tabId[i].replaceAll("[^0-9,A-Z]", "");     //retrait des caractères spéciaux ([])
+					tabId[i] = tabId[i].replaceAll("[^0-9,A-Z]", "");//retrait des caractères spéciaux ([])
 				}
                      
                         if(this.userServ.delete(tabId))  resp = "ok";
@@ -166,13 +167,15 @@ public class AlarmPlugin extends CordovaPlugin{
                         if(this.userServ.update(user,idUser))  resp = "ok";                     
                   } 
                   else if ("UpdateUser".equals(action)){
-                        int id = args.getInt(0);
+                        int idUser = args.getInt(0);
                         String name = args.getString(1);
                         String phone = args.getString(2);
+                        User user = this.userServ.getById(idUser);
 
-                       // this.user = new User(this.cordova.getActivity(),name,phone); 
-    
-                        //if(this.user.Update(id))  resp = "ok";                     
+                        user.setName(name);
+                        user.setPhone(phone);
+
+                        if(this.userServ.update(user,idUser))  resp = "ok";                   
                   } 
                   else if ("AddUser".equals(action)) {			
                         try {						
@@ -183,11 +186,7 @@ public class AlarmPlugin extends CordovaPlugin{
                               Date obDate = DateOperation.ConvertToDate(date,"dd-MM-yyyy");
                               Date dateRapel = DateOperation.ConvertToDate("01/11/2020","dd-MM-yyyy");
 
-                              JSONArray jsonOption = this.option.GetAll();
-                              for (int i=0; i < jsonOption.length(); i++) {
-                                    JSONObject obj = jsonOption.getJSONObject(i);
-                                    hour =  obj.get("hour").toString();
-                              }                           
+                              hour = this.optionServ.getHour();
                               String fullDate = date + " " + hour;//date complete
                                                                       
                               if(obDate.before( new Date())) resp = "La date est passée !";
@@ -200,16 +199,18 @@ public class AlarmPlugin extends CordovaPlugin{
                               }  
                         } catch(Exception e) {	
                               callbackContext.error(e.getMessage());
+
                               return false;
                         }                      	
                   } 
-                  else if ("GetOptions".equals(action))  resp = this.option.GetAll().toString();	                 
+                  else if ("GetOptions".equals(action))  resp = this.optionServ.getAll();	
+
                   else if ("UpdateOptions".equals(action)) {
                         String sms = args.getString(0);
                         String hour = args.getString(1);
                       
                         try {	
-                              if(this.option.Update( sms, hour)){                          		
+                              if(this.optionServ.update(sms, hour)){                          		
                                     String date = DateOperation.ConvertToString(new Date()) +" "+ hour;
                                     IntentCreation intentC = new IntentCreation(date,this.cordova.getActivity()); 
                                     Alarme alarm = new Alarme(intentC.Create(),this.cordova.getActivity());	
@@ -220,12 +221,14 @@ public class AlarmPlugin extends CordovaPlugin{
             
                         } catch(Exception e) {	
                               callbackContext.error(e.getMessage());
+
                               return false;
                         }         	
                   }
                   else if ("SearchDate".equals(action)) {
                         try {	
                               String dateSearch = args.getString(0);  
+
                               resp = this.userServ.searchMonthAnniv(dateSearch);
 
                         } catch(Exception e) {	
@@ -235,7 +238,6 @@ public class AlarmPlugin extends CordovaPlugin{
                         }         	
 			}			            			
 		} catch(Exception e) {	
-
                   callbackContext.error(e.getMessage());
                   
                   return false;
@@ -247,43 +249,18 @@ public class AlarmPlugin extends CordovaPlugin{
 
       /***************** Initialisation de l'application (channel de notification) **********************/
       private boolean Init(){ 
-            this.option = new Option(this.cordova.getActivity());
+            this.optionServ = new OptionService(this.cordova.getActivity());
             this.userServ = new UserService(this.cordova.getActivity());  
            
 
             NotificationCreation nc = new NotificationCreation(this.cordova.getActivity());// init channel
             nc.CreateNotificationChannel();
             
-
             return true;
-				//callbackContext.success(dbHelper.patch2());
-				///ArrayList<String> al = new ArrayList<String>();
-				//al = dbHelper.GetAll();
-						
-				/*Fichier fi=new Fichier(al);	
-				boolean reussite=fi.create(); */
-
-				/*ArrayList<String> al2 = new ArrayList<String>();
-				al2 = dbHelper.getAll2();*/
-
-				/*Context context = this.cordova.getActivity().getApplicationContext();
-
-				Intent intent2 = new Intent(context.getApplicationContext(),WakeUp.class);
-				intent2.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK); 
-				intent2.putExtra("nom","ddd");
-				context.startActivity(intent2);*/
-
-				/*if(reussite==true){
-					
-					callbackContext.success(fi.get_location_absolute());
-				}else{
-					
-					callbackContext.error("Erreur lors de la création du fichier");
-				}*/
       } 
       
       private String InitAlarm(){
-            String hour = ParseJson.GetHour(this.option);        
+            String hour = this.optionServ.getHour();        
             String date = DateOperation.ConvertToString(new Date()) +" "+ hour;
             IntentCreation intentC = new IntentCreation(date,this.cordova.getActivity());           
             Alarme alarm = new Alarme(intentC.Create(),this.cordova.getActivity());				

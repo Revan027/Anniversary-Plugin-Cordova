@@ -10,18 +10,17 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import android.content.ContentValues;
 
-public final class Option extends DAO  {
+public final class OptionRepository extends DAO  {
 
       private String Text;
       private String LastName;
       private String Hour;
 
-      public Option(Context context){
+      public OptionRepository(Context context){
             super(context);      
       }
 
-      public JSONArray GetAll() {	           
-            ArrayList<String> array_list = new ArrayList<String>();
+      public JSONArray getAll() {	           
             JSONArray array = new JSONArray();              
             SQLiteDatabase db = this.getWritableDatabase();
             Cursor cursor = db.rawQuery("SELECT "+COLUMN_TEXT+", "+COLUMN_HOUR+" FROM "+TABLE_NAME_2, null);
@@ -32,18 +31,19 @@ public final class Option extends DAO  {
                         JSONObject obj = new JSONObject();
                         obj.put("sms", cursor.getString(0));
                         obj.put("hour", cursor.getString(1));
-                        array.put(obj);
-                        
-                  }catch(JSONException e) {
+                        array.put(obj);                      
+                  }
+                  catch(JSONException e) {
                         System.err.println("Exception: " + e.getMessage());
                   }
                   cursor.moveToNext();
             }
             cursor.close();
+
             return array;
       }
 
-      public boolean Update (String sms, String hour) {
+      public boolean update (String sms, String hour) {
             try {
                   SQLiteDatabase db = this.getWritableDatabase();
                   ContentValues data = new ContentValues();
@@ -51,6 +51,7 @@ public final class Option extends DAO  {
                   data.put(COLUMN_HOUR,hour);
                   db.update(TABLE_NAME_3, data, COLUMN_ID_3 +" = 1", null);
                   db.close(); 
+
                   return true;
             }
             catch(Exception e) {

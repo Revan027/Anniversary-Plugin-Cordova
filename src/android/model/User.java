@@ -41,6 +41,14 @@ public final class User {
             return this.State;
       }
 
+      public void setName(String name){
+            this.Name = name;
+      }
+
+      public void setPhone(String phone){
+            this.Phone = phone;
+      }
+
       public void setState(boolean state){
             this.State = state;
       }
