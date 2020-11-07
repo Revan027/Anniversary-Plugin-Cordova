@@ -49,7 +49,7 @@ public final class OptionRepository extends DAO  {
                   ContentValues data = new ContentValues();
                   data.put(COLUMN_TEXT,sms);
                   data.put(COLUMN_HOUR,hour);
-                  db.update(TABLE_NAME_2, data, COLUMN_ID_3 +" = 1", null);
+                  db.update(TABLE_NAME_2, data, COLUMN_ID_2 +" = 1", null);
                   db.close(); 
 
                   return true;
