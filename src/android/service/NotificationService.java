@@ -15,7 +15,7 @@ public class NotificationService {
       public static void handleWakeLock(Context context){
             PowerManager pm = (PowerManager)context.getSystemService(Context.POWER_SERVICE);
             WakeLock wakeLock = pm.newWakeLock((PowerManager.SCREEN_BRIGHT_WAKE_LOCK | PowerManager.FULL_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP), "TAG");	//
-            wakeLock.acquire();	// L’arrêt de la veille se fait par la méthode acquire, l’activation par la méthode release          
+            wakeLock.acquire();// L’arrêt de la veille se fait par la méthode acquire, l’activation par la méthode release          
       }
 
       /**

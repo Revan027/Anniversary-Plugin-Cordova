@@ -120,8 +120,7 @@
         <source-file src="src/android/alarme/IntentCreation.java" target-dir="src/com/revan/anniversaryplugin/alarme" />
             <source-file src="src/android/broadcast/AlarmReceiver.java" target-dir="src/com/revan/anniversaryplugin/broadcast" /> 	          		
 		<source-file src="src/android/lib/NotificationCreation.java" target-dir="src/com/revan/anniversaryplugin/lib" />
-		<source-file src="src/android/lib/DateOperation.java" target-dir="src/com/revan/anniversaryplugin/lib" />
-            <source-file src="src/android/lib/ParseJson.java" target-dir="src/com/revan/anniversaryplugin/lib" />         
+		<source-file src="src/android/lib/DateOperation.java" target-dir="src/com/revan/anniversaryplugin/lib" />    
 		<source-file src="src/android/lib/SingletonServiceManager.java" target-dir="src/com/revan/anniversaryplugin/lib" />			
 		
      </platform>          

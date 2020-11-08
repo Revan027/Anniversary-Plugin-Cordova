@@ -95,7 +95,7 @@ public class RebootService extends Service {
 					nc.createNotification();
 
 					/*******construit et incrémente la nouvelle alarme*********/									
-					date_complete = dateo.incrementeDate(date_complete);
+					//date_complete = dateo.incrementeDate(date_complete);
 
 					IntentCreation intentC = new IntentCreation(name,date_complete,idAlarm,this);
 					intentC.create();	

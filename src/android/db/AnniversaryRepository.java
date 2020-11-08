@@ -41,8 +41,8 @@ public final class Anniversary extends DAO {
             try {
                   SQLiteDatabase db = this.getWritableDatabase();
                   ContentValues contentValues = new ContentValues();    
-                  contentValues.put(COLUMN_DATE, DateOperation.ConvertToString(this.Date));
-                  contentValues.put(COLUMN_DATE_RAPPEL,DateOperation.ConvertToString(this.DateRappel));
+                  contentValues.put(COLUMN_DATE, DateOperation.ConvertToString(this.Date,"dd-MM-yyyy"));
+                  contentValues.put(COLUMN_DATE_RAPPEL,DateOperation.ConvertToString(this.DateRappel,"dd-MM-yyyy"));
                   contentValues.put(COLUMN_ID_USER,this.IdUser);		
                   ret = db.insert(TABLE_NAME, null, contentValues);
                   db.close();

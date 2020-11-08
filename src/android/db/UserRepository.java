@@ -12,10 +12,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import android.content.ContentValues;
 import android.text.TextUtils;
-import java.util.HashMap;
 import java.util.Date;
 
-public final class UserRepository extends DAO {   
+public final class UserRepository extends DAO {  
+       
       private User User;
 
       public UserRepository(Context context){
@@ -29,8 +29,8 @@ public final class UserRepository extends DAO {
                   ContentValues contentValues = new ContentValues();    
                   contentValues.put(DAO.COLUMN_NAME, user.getName());
                   contentValues.put(DAO.COLUMN_PHONE, user.getPhone());	
-                  contentValues.put(DAO.COLUMN_DATE_ANNIV, DateOperation.ConvertToString(user.getDateAnniv()));
-                  contentValues.put(DAO.COLUMN_DATE_RAPPEL, DateOperation.ConvertToString(user.getDateRappel()));	
+                  contentValues.put(DAO.COLUMN_DATE_ANNIV, DateOperation.ConvertToString(user.getDateAnniv(),"dd-MM-yyyy"));
+                  contentValues.put(DAO.COLUMN_DATE_RAPPEL, DateOperation.ConvertToString(user.getDateRappel(),"dd-MM-yyyy"));	
                   contentValues.put(DAO.COLUMN_STATE, user.getState());	
 
                   ret = db.insert(DAO.TABLE_NAME, null, contentValues);
@@ -41,17 +41,6 @@ public final class UserRepository extends DAO {
             catch(Exception e) {
                   return ret;
             }          
-      }
-
-      public boolean UpdateState (int id,HashMap dataMap) {		
-           /* SQLiteDatabase db = this.getWritableDatabase();
-            ContentValues data = new ContentValues();
-            Object state = dataMap.get("State");
-
-            if(state != null)  data.put(DAO.COLUMN_STATE,(int)state);
-          
-            db.update(DAO.TABLE_NAME, data, DAO.COLUMN_ID +" = "+id, null);*/
-            return true;
       }
 
       public boolean update (User user, int id) {		
@@ -69,7 +58,7 @@ public final class UserRepository extends DAO {
 	public boolean delete (String[] tabId) {			
             SQLiteDatabase db = this.getWritableDatabase();
             String idsCSV = TextUtils.join(",", tabId);
-		db.delete(DAO.TABLE_NAME, "Id IN (" + idsCSV + ")", null); 
+		db.delete(DAO.TABLE_NAME, DAO.COLUMN_ID+" IN (" + idsCSV + ")", null); 
             db.close();   
 
             return true;
@@ -125,7 +114,7 @@ public final class UserRepository extends DAO {
             return array;
       }
 
-      public JSONArray getByDate(String dateSearch){
+      public JSONArray getByMonthAnniv(String dateSearch){
             JSONArray array = new JSONArray();     
             SQLiteDatabase db = getWritableDatabase();
             String query = "SELECT "+DAO.COLUMN_ID+", "+DAO.COLUMN_NAME+", "+DAO.COLUMN_DATE_ANNIV+" FROM "+DAO.TABLE_NAME+ 
@@ -149,5 +138,23 @@ public final class UserRepository extends DAO {
             cursor.close();
 
             return array;
+      }
+
+      public Cursor getByDateAnniv(String dateSearch){
+            SQLiteDatabase db = getWritableDatabase();
+            String query = "SELECT "+DAO.COLUMN_ID+", "+DAO.COLUMN_NAME+", "+DAO.COLUMN_DATE_ANNIV+" FROM "+DAO.TABLE_NAME+ 
+                  " WHERE substr("+DAO.COLUMN_DATE_ANNIV+", 1, 11) LIKE ? ";
+            Cursor cursor = db.rawQuery(query, new String[] {dateSearch}); 
+
+            return cursor;
+      }
+
+      public Cursor getByDateRappel(String dateSearch){         
+            SQLiteDatabase db = getWritableDatabase();
+            String query = "SELECT "+DAO.COLUMN_ID+", "+DAO.COLUMN_NAME+", "+DAO.COLUMN_DATE_ANNIV+" FROM "+DAO.TABLE_NAME+ 
+                  " WHERE "+DAO.COLUMN_DATE_RAPPEL+" LIKE ? ";
+            Cursor cursor = db.rawQuery(query, new String[] {dateSearch}); 
+
+            return cursor;
       }
 }

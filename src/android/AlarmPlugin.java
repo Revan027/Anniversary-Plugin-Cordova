@@ -184,7 +184,7 @@ public class AlarmPlugin extends CordovaPlugin{
                               String phone = args.getString(2);
                               String hour = "";
                               Date obDate = DateOperation.ConvertToDate(date,"dd-MM-yyyy");
-                              Date dateRapel = DateOperation.ConvertToDate("01/11/2020","dd-MM-yyyy");
+                              Date dateRapel = DateOperation.creationRappel(date);
 
                               hour = this.optionServ.getHour();
                               String fullDate = date + " " + hour;//date complete
@@ -211,7 +211,7 @@ public class AlarmPlugin extends CordovaPlugin{
                       
                         try {	
                               if(this.optionServ.update(sms, hour)){                          		
-                                    String date = DateOperation.ConvertToString(new Date()) +" "+ hour;
+                                    String date = DateOperation.ConvertToString(new Date(),"dd-MM-yyyy") +" "+ hour;
                                     IntentCreation intentC = new IntentCreation(date,this.cordova.getActivity()); 
                                     Alarme alarm = new Alarme(intentC.Create(),this.cordova.getActivity());	
                                     alarm.Update();
@@ -261,7 +261,7 @@ public class AlarmPlugin extends CordovaPlugin{
       
       private String InitAlarm(){
             String hour = this.optionServ.getHour();        
-            String date = DateOperation.ConvertToString(new Date()) +" "+ hour;
+            String date = DateOperation.ConvertToString(new Date(),"dd-MM-yyyy") +" "+ hour;
             IntentCreation intentC = new IntentCreation(date,this.cordova.getActivity());           
             Alarme alarm = new Alarme(intentC.Create(),this.cordova.getActivity());				
 

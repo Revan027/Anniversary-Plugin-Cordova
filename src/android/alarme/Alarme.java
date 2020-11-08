@@ -13,6 +13,8 @@ import android.os.Build;
 import java.util.GregorianCalendar;	
 import android.os.Bundle;
 import android.util.Log;
+
+
 public class Alarme {
 	
 	private Context context;
@@ -39,11 +41,16 @@ public class Alarme {
                         pendingIntent = PendingIntent.getBroadcast(this.context,1,this.intent,0);
                         tes = "null";
 
-                        if(this.date.before(new Date())) this.date = DateOperation.AddDay(this.date);
+                        if(this.date.before(new Date())) this.date = DateOperation.addDay(this.date,"dd-MM-yyyy HH:mm");
+
+                      
 
                         if (Build.VERSION.SDK_INT >= 19) alarmMgr.setExact(AlarmManager.RTC_WAKEUP, this.date.getTime(), pendingIntent);
+
                         else alarmMgr.set(AlarmManager.RTC_WAKEUP, this.date.getTime(), pendingIntent);
-                  }              
+                  }  
+
+            
                   return  tes;   
 
 		} catch(Exception e) {			
@@ -61,7 +68,7 @@ public class Alarme {
 			AlarmManager alarmMgr = (AlarmManager)(this.context.getSystemService(Context.ALARM_SERVICE));
                   PendingIntent pendingIntent = PendingIntent.getBroadcast(this.context,1,this.intent,PendingIntent.FLAG_UPDATE_CURRENT);
       
-                  if(this.date.before(new Date())) this.date = DateOperation.AddDay(this.date);
+                  if(this.date.before(new Date())) this.date = DateOperation.addDay(this.date,"dd-MM-yyyy HH:mm");
 
                   if (Build.VERSION.SDK_INT >= 19) alarmMgr.setExact(AlarmManager.RTC_WAKEUP, this.date.getTime(), pendingIntent);
                   else alarmMgr.set(AlarmManager.RTC_WAKEUP, this.date.getTime(), pendingIntent);
