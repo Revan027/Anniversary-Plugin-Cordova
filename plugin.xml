@@ -12,7 +12,7 @@
     </js-module>
 
     <!-- android -->
-    <platform name="android">
+     <platform name="android">
         <config-file target="res/xml/config.xml" parent="/*">
             <feature name="AlarmPlugin">
                 <param name="android-package" value="com.revan.anniversaryplugin.AlarmPlugin"/>
@@ -34,7 +34,7 @@
                         android:showOnLockScreen="true" 
                         android:showWhenLocked="true"
                         android:turnScreenOn="true"
-                        android:screenOrientation="sensorPortrait" >
+                        android:screenOrientation="sensor" >
                         <intent-filter>
                               <action android:name="android.intent.action.VIEW" />
                               <category android:name="android.intent.category.DEFAULT" />
@@ -114,14 +114,13 @@
 
       <!-- src lib -->
       <source-file src="src/android/AlarmPlugin.java" target-dir="src/com/revan/anniversaryplugin" />  
-      
-		
+      		
 	<source-file src="src/android/alarme/Alarme.java" target-dir="src/com/revan/anniversaryplugin/alarme" /> 
-        <source-file src="src/android/alarme/IntentCreation.java" target-dir="src/com/revan/anniversaryplugin/alarme" />
-            <source-file src="src/android/broadcast/AlarmReceiver.java" target-dir="src/com/revan/anniversaryplugin/broadcast" /> 	          		
-		<source-file src="src/android/lib/NotificationCreation.java" target-dir="src/com/revan/anniversaryplugin/lib" />
-		<source-file src="src/android/lib/DateOperation.java" target-dir="src/com/revan/anniversaryplugin/lib" />    
-		<source-file src="src/android/lib/SingletonServiceManager.java" target-dir="src/com/revan/anniversaryplugin/lib" />			
+      <source-file src="src/android/alarme/IntentCreation.java" target-dir="src/com/revan/anniversaryplugin/alarme" />
+      <source-file src="src/android/broadcast/AlarmReceiver.java" target-dir="src/com/revan/anniversaryplugin/broadcast" /> 	          		
+      <source-file src="src/android/lib/NotificationCreation.java" target-dir="src/com/revan/anniversaryplugin/lib" />
+      <source-file src="src/android/lib/DateOperation.java" target-dir="src/com/revan/anniversaryplugin/lib" />    
+      <source-file src="src/android/lib/SingletonServiceManager.java" target-dir="src/com/revan/anniversaryplugin/lib" />			
 		
      </platform>          
 </plugin>

@@ -14,6 +14,18 @@ public final class UserService {
             this.UserRepository = new UserRepository(context);
       }
     
+      public int getUsersNbr(){
+            return this.UserRepository.countUsers();
+      }
+
+      public int countMonthAnniv(String dateSearch){
+            return this.UserRepository.countMonthAnniv(dateSearch);
+      }
+
+      public int countUserAnniv(String dateSearch){
+            return this.UserRepository.countUserAnniv(dateSearch);
+      }
+
       public long add(User user){
             return this.UserRepository.add(user);
       }
@@ -26,8 +38,8 @@ public final class UserService {
             return this.UserRepository.delete(tabId);
       }
 
-      public String getAllInJSON(){
-            return this.UserRepository.getAll().toString();
+      public String getAllInJSON(String limit, String offset){
+            return this.UserRepository.getAll(limit, offset).toString();
       }
 
       public String searchMonthAnniv(String dateSearch){

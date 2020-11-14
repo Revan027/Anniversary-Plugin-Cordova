@@ -22,6 +22,56 @@ public final class UserRepository extends DAO {
             super(context);   
       }
 
+      public int countUsers(){  
+            int count = 0;
+            SQLiteDatabase db = getWritableDatabase();
+            Cursor cursor = db.rawQuery("SELECT count(*) FROM "+DAO.TABLE_NAME+"",null);
+            cursor.moveToFirst();
+          
+            while (!cursor.isAfterLast()) {          
+                  count = cursor.getInt(0);
+                        
+                  cursor.moveToNext();
+            }
+            cursor.close();
+
+            return count;
+      }
+
+      public int countMonthAnniv(String dateSearch){
+            int count = 0;
+            SQLiteDatabase db = getWritableDatabase();
+            String query = "SELECT count(*) FROM "+DAO.TABLE_NAME+" WHERE "+DAO.COLUMN_DATE_RAPPEL+" LIKE ? ";
+            Cursor cursor = db.rawQuery(query, new String[] {dateSearch}); 
+            cursor.moveToFirst();
+          
+            while (!cursor.isAfterLast()) {          
+                  count = cursor.getInt(0);
+                        
+                  cursor.moveToNext();
+            }
+            cursor.close();
+
+            return count;
+      }
+
+      public int countUserAnniv(String dateSearch){
+            int count = 0;
+            SQLiteDatabase db = getWritableDatabase();
+            String query = "SELECT count(*) FROM "+DAO.TABLE_NAME+" WHERE "+DAO.COLUMN_DATE_ANNIV+" LIKE ? ";
+            Cursor cursor = db.rawQuery(query, new String[] {dateSearch}); 
+            cursor.moveToFirst();
+          
+            while (!cursor.isAfterLast()) {          
+                  count = cursor.getInt(0);
+                        
+                  cursor.moveToNext();
+            }
+            cursor.close();
+
+            return count;
+      }
+
       public long add(User user){
             long ret = 0;
             try {
@@ -86,11 +136,13 @@ public final class UserRepository extends DAO {
             return user;
       }
 
-      public JSONArray getAll() {	         
+      public JSONArray getAll(String limit, String offset) {	
             JSONArray array = new JSONArray();     
             SQLiteDatabase db = getWritableDatabase();
             Cursor cursor = db.rawQuery("SELECT "+DAO.COLUMN_ID+", "+DAO.COLUMN_NAME+", "+DAO.COLUMN_PHONE+", "+DAO.COLUMN_STATE+
-                  " ,substr("+DAO.COLUMN_DATE_ANNIV+", 1, 11) as date, "+DAO.COLUMN_DATE_RAPPEL+" FROM "+DAO.TABLE_NAME+"",null);
+                  " ,substr("+DAO.COLUMN_DATE_ANNIV+", 1, 11) as date, "+DAO.COLUMN_DATE_RAPPEL+" FROM "+DAO.TABLE_NAME+
+                  " LIMIT "+limit+ " OFFSET "+offset, null);
+
             cursor.moveToFirst();
 
             while (!cursor.isAfterLast()) { 

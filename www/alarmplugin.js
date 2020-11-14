@@ -17,13 +17,22 @@ var alarm = {
                 [rien]
             );
       },
-      getUsers: function(rien, successCallback, errorCallback) {
+      getUsersNbr: function(rien,successCallback, errorCallback) {
+            cordova.exec(
+                  successCallback,
+                  errorCallback,
+                  "AlarmPlugin",
+                  "getUsersNbr",
+                  [rien]
+            );
+      },
+      getUsers: function(limit,offset, successCallback, errorCallback) {
             cordova.exec(
                   successCallback,
                   errorCallback,
                   "AlarmPlugin",
                   "GetUsers",
-                  [rien]
+                  [limit,offset]
             );
       },
       addUser: function(alarmDate,name,phone, successCallback, errorCallback) {

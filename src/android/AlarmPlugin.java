@@ -146,8 +146,14 @@ public class AlarmPlugin extends CordovaPlugin{
 
 				return true;
                   } 
-                  else if ("GetUsers".equals(action)) resp = this.userServ.getAllInJSON();
-
+                  else if ("GetUsers".equals(action)){
+                        String limit = args.getString(0);
+                        String offset = args.getString(1);
+                        resp = this.userServ.getAllInJSON(limit, offset);
+                  }
+                  else if ("getUsersNbr".equals(action)){
+                        resp = Integer.toString(this.userServ.getUsersNbr());
+                  }
                   else if ("DeleteUser".equals(action)){
                         String[] tabId =  args.getString(0).split(",");
 
