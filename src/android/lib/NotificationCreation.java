@@ -24,21 +24,18 @@ public class NotificationCreation{
 	private String message;
 	private int id;
 	
-	public NotificationCreation(Context context,String titre, String message,int id) { 
-	
+	public NotificationCreation(Context context, String titre, String message, int id) { 
 		this.context = context;
 		this.titre = titre;
 		this.message = message;
 		this.id = id;
-    } 
+      } 
 	
-	public NotificationCreation(Context context) { 
-	
+	public NotificationCreation(Context context) { 	
 		this.context = context;
-    } 
+     } 
 	
-	public void createNotification()  {
-		
+	public void createNotification()  {		
 		Intent intent = new Intent();
 		intent.setAction("com.revan.anniversaryplugin.ALARM");
 		intent.setPackage(context.getPackageName());
@@ -48,18 +45,17 @@ public class NotificationCreation{
 		Notification.Builder builder;
 		
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-			builder = new Notification.Builder(this.context,"memory-aid");		// Construction d'un builder pour la notifiacation	
+			builder = new Notification.Builder(this.context,"memory-aid");		
 		}else{
-			builder = new Notification.Builder(this.context);		// Construction d'un builder pour la notifiacation
-		}
-		
+			builder = new Notification.Builder(this.context);
+		}		
 		Resources r = context.getResources();
             int resourceId = r.getIdentifier("ic_memory", "drawable", context.getPackageName());
-		builder.setContentTitle(this.titre);	//titre
-		builder.setContentText(this.message);	//contenu
-		builder.setSmallIcon(resourceId);	//icone
-		builder.setContentIntent(pendingIntent);	//pendingIntent pour faire rediriger sur l'appli
-		builder.setAutoCancel(true);	//ferme la notification lors de l'appuie
+		builder.setContentTitle(this.titre);//titre
+		builder.setContentText(this.message);//contenu
+		builder.setSmallIcon(resourceId);//icone
+		builder.setContentIntent(pendingIntent);//pendingIntent pour faire rediriger sur l'appli
+		builder.setAutoCancel(true);//ferme la notification lors du focus
 					
 		NotificationManager notifManager = (NotificationManager)
 		this.context.getSystemService(Context.NOTIFICATION_SERVICE);

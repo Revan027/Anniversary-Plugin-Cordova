@@ -2,6 +2,7 @@ package com.revan.anniversaryplugin.service;
 
 import com.revan.anniversaryplugin.model.*;
 import com.revan.anniversaryplugin.db.*;
+import com.revan.anniversaryplugin.lib.*;
 import java.util.Date;
 import android.content.Context;
 import android.database.Cursor;
@@ -46,15 +47,29 @@ public final class UserService {
             return this.UserRepository.getByMonthAnniv(dateSearch).toString();
       }
 
-      public Cursor searchUserAnniv(String dateSearch){
+      public User[] searchUserAnniv(String dateSearch){
             return this.UserRepository.getByDateAnniv(dateSearch);
       }
 
-      public Cursor searchUserAnnivRappel(String dateSearch){
+      public User[] searchUserAnnivRappel(String dateSearch){
             return this.UserRepository.getByDateRappel(dateSearch);
       }
 
       public User getById(int id){
             return this.UserRepository.getById(id);
+      }
+      
+      public void handleAnniv(User user){
+            Date dateNow = new Date();
+            Date dateAnniv = user.getDateAnniv();
+
+            if (dateNow.compareTo(dateAnniv) >= 0){
+                  Date newDate = DateOperation.addYear(dateAnniv, "dd-MM-yyyy");
+                  user.setDateAnniv(newDate); 
+                  user.setDateRappel(DateOperation.creationRappel(newDate));          
+            }else{
+                  user.setDateRappel(DateOperation.creationRappel(dateAnniv));
+            }          
+           this.update(user, user.getId());
       }
 }

@@ -190,7 +190,7 @@ public class AlarmPlugin extends CordovaPlugin{
                               String phone = args.getString(2);
                               String hour = "";
                               Date obDate = DateOperation.ConvertToDate(date,"dd-MM-yyyy");
-                              Date dateRapel = DateOperation.creationRappel(date);
+                              Date dateRapel = DateOperation.creationRappel(obDate);
 
                               hour = this.optionServ.getHour();
                               String fullDate = date + " " + hour;//date complete
@@ -198,7 +198,7 @@ public class AlarmPlugin extends CordovaPlugin{
                               if(obDate.before( new Date())) resp = "La date est passée !";
 
                               else{                                   
-                                    User user = new User(name,phone,obDate,dateRapel,false); 
+                                    User user = new User(0,name,phone,obDate,dateRapel,false); 
                                     this.userServ.add(user);
 
                                     resp = "ok";

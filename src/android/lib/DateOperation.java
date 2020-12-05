@@ -64,41 +64,30 @@ public class DateOperation {
 		return newDate;
       }
       
-	public static Date creationRappel(String dateAnniv){
-            SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm");
-
+	public static Date creationRappel(Date date){
 		Date dateNow = new Date();
 		String dateRappelString = "";
-		
-		try{	
-				
-			Date date = sdf.parse(dateAnniv);
-				
-			GregorianCalendar calStr1 = new GregorianCalendar();
-			calStr1.setTime(date); 
-			calStr1.add(GregorianCalendar.DATE, -7); 
+		Date dateRappel = null;
+
+		try{		
+			GregorianCalendar gregCalend = new GregorianCalendar();
+			gregCalend.setTime(date); 
+			gregCalend.add(GregorianCalendar.DATE, -7); 
 			
-			dateRappelString =  sdf.format(calStr1.getTime());	
-			Date dateRappel = sdf.parse(dateRappelString);	//creation de la date rappel à 7 jours
+			dateRappelString = ConvertToString(gregCalend.getTime(), "dd-MM-yyyy HH:mm");	
+	            dateRappel = ConvertToDate(dateRappelString, "dd-MM-yyyy HH:mm");// date rappel à 7 jours
 			
-			if (dateNow.compareTo(dateRappel) >= 0 ) {	//si la date courante et > que la date anniv-7jours, on regarde avec la date anniv-2jours
-				
-				calStr1.setTime(date); 
-				calStr1.add(GregorianCalendar.DATE, -2); 
-				dateRappelString = sdf.format(calStr1.getTime());	
-				dateRappel = sdf.parse(dateRappelString);	//creation de la date rappel à 2 jours
-				 
-				if (dateNow.compareTo(dateRappel) >= 0) {	//si la date courante et > que la dte anniv-2jours
-					
-					return DateOperation.ConvertToDate(dateAnniv,"dd-MM-yyyy");	//nous sommes à  l'anniversaire
-					
-				}			
+			if (dateNow.compareTo(dateRappel) >= 0 ) {// si la date courante et > que la date anniv-7jours, on regarde avec la date anniv-2 jours			
+				gregCalend.setTime(date); 
+				gregCalend.add(GregorianCalendar.DATE, -2);
+                        dateRappelString =  ConvertToString(gregCalend.getTime(), "dd-MM-yyyy HH:mm");
+			      dateRappel = ConvertToDate(dateRappelString, "dd-MM-yyyy HH:mm");// date rappel à 2 jours		 		
 			}
 		
-		} catch(Exception e) {
-			
+		} catch(Exception e) {			
 		    System.err.println("Exception: " + e.getMessage());
 		} 
-		return DateOperation.ConvertToDate(dateRappelString,"dd-MM-yyyy");
+
+		return dateRappel;
 	}
 }

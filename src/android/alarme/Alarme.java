@@ -41,9 +41,7 @@ public class Alarme {
                         pendingIntent = PendingIntent.getBroadcast(this.context,1,this.intent,0);
                         tes = "null";
 
-                        if(this.date.before(new Date())) this.date = DateOperation.addDay(this.date,"dd-MM-yyyy HH:mm");
-
-                      
+                        if(this.date.before(new Date())) this.date = DateOperation.addDay(this.date,"dd-MM-yyyy HH:mm");                  
 
                         if (Build.VERSION.SDK_INT >= 19) alarmMgr.setExact(AlarmManager.RTC_WAKEUP, this.date.getTime(), pendingIntent);
 

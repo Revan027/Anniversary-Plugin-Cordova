@@ -99,6 +99,8 @@ public final class UserRepository extends DAO {
 
             data.put(DAO.COLUMN_PHONE,user.getPhone());
             data.put(DAO.COLUMN_NAME, user.getName());
+            data.put(DAO.COLUMN_DATE_RAPPEL, DateOperation.ConvertToString(user.getDateRappel(),"dd-MM-yyyy")); 
+            data.put(DAO.COLUMN_DATE_ANNIV, DateOperation.ConvertToString(user.getDateAnniv(),"dd-MM-yyyy")); 
             data.put(DAO.COLUMN_STATE,user.getState());      
             db.update(DAO.TABLE_NAME, data, DAO.COLUMN_ID +" = ?", new String[] {Integer.toString(id)});
 
@@ -117,8 +119,7 @@ public final class UserRepository extends DAO {
       public User getById(int id) {	         
             User user = null;    
             SQLiteDatabase db = getWritableDatabase();
-            Cursor cursor = db.rawQuery("SELECT "+DAO.COLUMN_ID+", "+DAO.COLUMN_NAME+", "+DAO.COLUMN_PHONE+", "+DAO.COLUMN_STATE+
-                  " ,"+DAO.COLUMN_DATE_ANNIV+", "+DAO.COLUMN_DATE_RAPPEL+" FROM "+DAO.TABLE_NAME+" WHERE "+DAO.COLUMN_ID+" = ?",new String[] {Integer.toString(id)});
+            Cursor cursor = db.rawQuery("SELECT * FROM "+DAO.TABLE_NAME+" WHERE "+DAO.COLUMN_ID+" = ?",new String[] {Integer.toString(id)});
             cursor.moveToFirst();
 
             while (!cursor.isAfterLast()) {          
@@ -128,7 +129,7 @@ public final class UserRepository extends DAO {
                   Date dateAnniv = DateOperation.ConvertToDate(cursor.getString(4),"dd-MM-yyyy");
                   Date dateRappel = DateOperation.ConvertToDate(cursor.getString(5),"dd-MM-yyyy");
 
-                  user = new User(name,phone,dateAnniv,dateRappel,state);             
+                  user = new User(id,name,phone,dateAnniv,dateRappel,state);             
                   cursor.moveToNext();
             }
             cursor.close();
@@ -192,21 +193,57 @@ public final class UserRepository extends DAO {
             return array;
       }
 
-      public Cursor getByDateAnniv(String dateSearch){
+      public User[] getByDateAnniv(String dateSearch){
+            int i = 0;   
             SQLiteDatabase db = getWritableDatabase();
-            String query = "SELECT "+DAO.COLUMN_ID+", "+DAO.COLUMN_NAME+", "+DAO.COLUMN_DATE_ANNIV+" FROM "+DAO.TABLE_NAME+ 
+            String query = "SELECT * FROM "+DAO.TABLE_NAME+ 
                   " WHERE substr("+DAO.COLUMN_DATE_ANNIV+", 1, 11) LIKE ? ";
             Cursor cursor = db.rawQuery(query, new String[] {dateSearch}); 
+            User[] user = new User[cursor.getCount()];      
+            cursor.moveToFirst();
 
-            return cursor;
+            while (!cursor.isAfterLast()) {        
+                  int id = cursor.getInt(0);  
+                  String name = cursor.getString(1);
+                  String phone = cursor.getString(2);              
+                  Date dateAnniv = DateOperation.ConvertToDate(cursor.getString(3),"dd-MM-yyyy");
+                  Date dateRappel = DateOperation.ConvertToDate(cursor.getString(4),"dd-MM-yyyy");
+                  boolean state = cursor.getInt(5) == 1 ? true : false;
+
+                  user[i] = new User(id,name,phone,dateAnniv,dateRappel,state);             
+                  cursor.moveToNext();
+                  i++;
+            }
+            cursor.close();
+
+            return user;
       }
 
-      public Cursor getByDateRappel(String dateSearch){         
+      public User[] getByDateRappel(String dateSearch){   
+            int i = 0;   
+            
             SQLiteDatabase db = getWritableDatabase();
-            String query = "SELECT "+DAO.COLUMN_ID+", "+DAO.COLUMN_NAME+", "+DAO.COLUMN_DATE_ANNIV+" FROM "+DAO.TABLE_NAME+ 
+            String query = "SELECT * FROM "+DAO.TABLE_NAME+ 
                   " WHERE "+DAO.COLUMN_DATE_RAPPEL+" LIKE ? ";
             Cursor cursor = db.rawQuery(query, new String[] {dateSearch}); 
+            User[] user = new User[cursor.getCount()];
+            cursor.moveToFirst();
+            
 
-            return cursor;
+            while (!cursor.isAfterLast()) {        
+                  int id = cursor.getInt(0);  
+                  String name = cursor.getString(1);
+                  String phone = cursor.getString(2);              
+                  Date dateAnniv = DateOperation.ConvertToDate(cursor.getString(3),"dd-MM-yyyy");
+                  Date dateRappel = DateOperation.ConvertToDate(cursor.getString(4),"dd-MM-yyyy");
+                  boolean state = cursor.getInt(5) == 1 ? true : false;
+
+                  user[i] = new User(id,name,phone,dateAnniv,dateRappel,state);             
+                  cursor.moveToNext();
+                  i++;
+            }
+            cursor.close();
+
+            return user;
       }
 }

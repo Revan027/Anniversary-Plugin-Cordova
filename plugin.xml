@@ -105,7 +105,7 @@
 
       <!-- src model -->
       <source-file src="src/android/model/User.java" target-dir="src/com/revan/anniversaryplugin/model" /> 
-      <source-file src="src/android/model/Option.java" target-dir="src/com/revan/anniversaryplugin/model" />          
+      <source-file src="src/android/model/Option.java" target-dir="src/com/revan/anniversaryplugin/model" />    
       
       <!-- src db -->
       <source-file src="src/android/db/DAO.java" target-dir="src/com/revan/anniversaryplugin/db" />
@@ -114,7 +114,7 @@
 
       <!-- src lib -->
       <source-file src="src/android/AlarmPlugin.java" target-dir="src/com/revan/anniversaryplugin" />  
-      		
+      <source-file src="src/android/lib/EnumNotification.java" target-dir="src/com/revan/anniversaryplugin/lib" />  
 	<source-file src="src/android/alarme/Alarme.java" target-dir="src/com/revan/anniversaryplugin/alarme" /> 
       <source-file src="src/android/alarme/IntentCreation.java" target-dir="src/com/revan/anniversaryplugin/alarme" />
       <source-file src="src/android/broadcast/AlarmReceiver.java" target-dir="src/com/revan/anniversaryplugin/broadcast" /> 	          		

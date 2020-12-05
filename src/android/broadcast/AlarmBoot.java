@@ -12,7 +12,6 @@ import android.util.Log;
 import android.os.Build;
 import android.widget.Toast;  
 
-								/***************** traitement rélalisé lors du redémarrage du portable **********************/
 public class AlarmBoot extends BroadcastReceiver {
 
     @Override
