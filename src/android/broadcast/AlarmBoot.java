@@ -1,4 +1,4 @@
-package com.uniclau.alarmplugin.broadcast;
+package com.revan.anniversaryplugin.broadcast;
 
 import com.revan.anniversaryplugin.lib.*;
 import com.revan.anniversaryplugin.service.*;
@@ -18,7 +18,7 @@ public class AlarmBoot extends BroadcastReceiver {
                   this.userServ = new UserService(context); 
 
                   Intent intentServ = new Intent(context, AlarmBroadcastService.class);
-                  intentServ.putExtra("broadcast","ALARM_RECEIVER");
+                  intentServ.putExtra("broadcast","ALARM_BOOT");
 
                   if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {// version API 26 
                         context.startForegroundService(intentServ);        

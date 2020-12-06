@@ -43,9 +43,6 @@
 		</config-file>
 
 		<!-- service -->
-		<config-file target="AndroidManifest.xml" parent="/manifest/application">
-			<service android:name="com.revan.anniversaryplugin.RebootService" android:enabled="true"/>
-		</config-file>
             <config-file target="AndroidManifest.xml" parent="/manifest/application">
 			<service android:name="com.revan.anniversaryplugin.service.AlarmBroadcastService" android:enabled="true"/>
 		</config-file>
@@ -67,61 +64,63 @@
             </config-file>
 
 		<!-- declaration des Broadcast Receiver -->
-        <config-file target="AndroidManifest.xml" parent="/manifest/application">
-            <receiver android:name="com.revan.anniversaryplugin.broadcast.AlarmReceiver" android:process=":remote"><!-- service distants -->
-            </receiver>
-			
-            <receiver android:name="com.revan.anniversaryplugin.broadcast.AlarmBoot"><!-- service de base -->
-                <intent-filter android:priority="100">
-                    <action android:name="android.intent.action.BOOT_COMPLETED"></action>
-                </intent-filter>
-            </receiver>
-			
-            <receiver android:name="com.revan.anniversaryplugin.broadcast.SmsDeliveredReceiver"><!-- service perso-->
-                <intent-filter>
-                    <action android:name="SMS_DELIVERED"></action><!-- action correspondant à un intent et qui écouter avec brodcaster -->
-                </intent-filter>
-            </receiver>
-			
-            <receiver android:name="com.revan.anniversaryplugin.broadcast.SmsSentReceiver">
-                <intent-filter>
-                    <action android:name="SMS_SENT"></action>
-                </intent-filter>
-            </receiver>		
-        </config-file>
+            <config-file target="AndroidManifest.xml" parent="/manifest/application">
+                  <receiver android:name="com.revan.anniversaryplugin.broadcast.AlarmReceiver" android:process=":remote"><!-- service distants -->
+                  </receiver>
+                        
+                  <receiver android:name="com.revan.anniversaryplugin.broadcast.AlarmBoot"><!-- service de base -->
+                  <intent-filter android:priority="100">
+                        <action android:name="android.intent.action.BOOT_COMPLETED"></action>
+                  </intent-filter>
+                  </receiver>
+                        
+                  <receiver android:name="com.revan.anniversaryplugin.broadcast.SmsDeliveredReceiver"><!-- service perso-->
+                  <intent-filter>
+                        <action android:name="SMS_DELIVERED"></action><!-- action correspondant à un intent et qui écouter avec brodcaster -->
+                  </intent-filter>
+                  </receiver>
+                        
+                  <receiver android:name="com.revan.anniversaryplugin.broadcast.SmsSentReceiver">
+                  <intent-filter>
+                        <action android:name="SMS_SENT"></action>
+                  </intent-filter>
+                  </receiver>		
+            </config-file>
 
-      <!-- src activity -->
-      <source-file src="src/android/activity/WakeUp.java" target-dir="src/com/revan/anniversaryplugin/activity" />
+            <!-- src activity -->
+            <source-file src="src/android/activity/WakeUp.java" target-dir="src/com/revan/anniversaryplugin/activity" />
 
-      <!-- src layout -->
-      <source-file src="src/android/res/layout/wake_up_activity.xml" target-dir="res/layout"/>
-	<source-file src="src/android/res/drawable/buttonshape.xml" target-dir="res/drawable"/>
+            <!-- src layout -->
+            <source-file src="src/android/res/layout/wake_up_activity.xml" target-dir="res/layout"/>
+            <source-file src="src/android/res/drawable/buttonshape.xml" target-dir="res/drawable"/>
 
-      <!-- src service -->
-      <source-file src="src/android/service/UserService.java" target-dir="src/com/revan/anniversaryplugin/service" /> 
-      <source-file src="src/android/service/OptionService.java" target-dir="src/com/revan/anniversaryplugin/service" /> 
-      <source-file src="src/android/service/AlarmBroadcastService.java" target-dir="src/com/revan/anniversaryplugin/service" /> 
-      <source-file src="src/android/service/NotificationService.java" target-dir="src/com/revan/anniversaryplugin/service" /> 
-      <source-file src="src/android/service/AlarmeService.java" target-dir="src/com/revan/anniversaryplugin/service" /> 
+            <!-- src service -->
+            <source-file src="src/android/service/UserService.java" target-dir="src/com/revan/anniversaryplugin/service" /> 
+            <source-file src="src/android/service/OptionService.java" target-dir="src/com/revan/anniversaryplugin/service" /> 
+            <source-file src="src/android/service/AlarmBroadcastService.java" target-dir="src/com/revan/anniversaryplugin/service" /> 
+            <source-file src="src/android/service/NotificationService.java" target-dir="src/com/revan/anniversaryplugin/service" /> 
+            <source-file src="src/android/service/AlarmeService.java" target-dir="src/com/revan/anniversaryplugin/service" /> 
 
-      <!-- src model -->
-      <source-file src="src/android/model/User.java" target-dir="src/com/revan/anniversaryplugin/model" /> 
-      <source-file src="src/android/model/Option.java" target-dir="src/com/revan/anniversaryplugin/model" />    
-      
-      <!-- src db -->
-      <source-file src="src/android/db/DAO.java" target-dir="src/com/revan/anniversaryplugin/db" />
-      <source-file src="src/android/db/UserRepository.java" target-dir="src/com/revan/anniversaryplugin/db" /> 
-      <source-file src="src/android/db/OptionRepository.java" target-dir="src/com/revan/anniversaryplugin/db" /> 
+            <!-- src model -->
+            <source-file src="src/android/model/User.java" target-dir="src/com/revan/anniversaryplugin/model" /> 
+            <source-file src="src/android/model/Option.java" target-dir="src/com/revan/anniversaryplugin/model" />    
+            
+            <!-- src db -->
+            <source-file src="src/android/db/DAO.java" target-dir="src/com/revan/anniversaryplugin/db" />
+            <source-file src="src/android/db/UserRepository.java" target-dir="src/com/revan/anniversaryplugin/db" /> 
+            <source-file src="src/android/db/OptionRepository.java" target-dir="src/com/revan/anniversaryplugin/db" /> 
 
-      <!-- src lib -->
-      <source-file src="src/android/AlarmPlugin.java" target-dir="src/com/revan/anniversaryplugin" />  
-      <source-file src="src/android/lib/EnumNotification.java" target-dir="src/com/revan/anniversaryplugin/lib" />  
-	
-      <source-file src="src/android/alarme/IntentCreation.java" target-dir="src/com/revan/anniversaryplugin/alarme" />
-      <source-file src="src/android/broadcast/AlarmReceiver.java" target-dir="src/com/revan/anniversaryplugin/broadcast" /> 	          		
-      <source-file src="src/android/lib/NotificationCreation.java" target-dir="src/com/revan/anniversaryplugin/lib" />
-      <source-file src="src/android/lib/DateOperation.java" target-dir="src/com/revan/anniversaryplugin/lib" />    
-      <source-file src="src/android/lib/SingletonServiceManager.java" target-dir="src/com/revan/anniversaryplugin/lib" />			
-		
+            <!-- src lib -->
+            <source-file src="src/android/AlarmPlugin.java" target-dir="src/com/revan/anniversaryplugin" />  
+            <source-file src="src/android/lib/EnumNotification.java" target-dir="src/com/revan/anniversaryplugin/lib" /> 
+            <source-file src="src/android/lib/DateOperation.java" target-dir="src/com/revan/anniversaryplugin/lib" />     
+            
+            <!-- src broacast -->
+            <source-file src="src/android/broadcast/AlarmReceiver.java" target-dir="src/com/revan/anniversaryplugin/broadcast" />
+            <source-file src="src/android/broadcast/AlarmBoot.java" target-dir="src/com/revan/anniversaryplugin/broadcast" /> 
+
+            <source-file src="src/android/alarme/IntentCreation.java" target-dir="src/com/revan/anniversaryplugin/alarme" />              		
+            <source-file src="src/android/lib/NotificationCreation.java" target-dir="src/com/revan/anniversaryplugin/lib" />    
+            <source-file src="src/android/lib/SingletonServiceManager.java" target-dir="src/com/revan/anniversaryplugin/lib" />				
      </platform>          
 </plugin>
