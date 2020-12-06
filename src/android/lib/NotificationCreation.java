@@ -62,14 +62,11 @@ public class NotificationCreation{
 
 		Notification notification = builder.getNotification();
 		notifManager.notify(this.id , notification);	
-
 	}	
 
 	/***************** Créer le NotificationChannel, seulement pour API 26+	**********************/
-	public void CreateNotificationChannel() {
-		
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-			
+	public void CreateNotificationChannel() {		
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {			
 			CharSequence name = "memory-aid channel";
 			int importance = NotificationManager.IMPORTANCE_DEFAULT;
 			NotificationChannel channel = new NotificationChannel("memory-aid", name, importance);
@@ -78,9 +75,7 @@ public class NotificationCreation{
 			NotificationManager notificationManager = this.context.getSystemService(NotificationManager.class);
 			Objects.requireNonNull(notificationManager).createNotificationChannel(channel);
 		}
-	}   
-	
-	
+	}   	
 	
 	/***************** Créer le NotificationChannel, seulement pour API 26+	**********************/
 	public Notification startForegroundNotification() {

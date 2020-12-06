@@ -1,35 +1,41 @@
 package com.uniclau.alarmplugin.broadcast;
 
-import com.revan.anniversaryplugin.db.*;
-import com.uniclau.alarmplugin.lib.*;
-import com.uniclau.alarmplugin.alarme.IntentCreation;
-import com.uniclau.alarmplugin.RebootService;
 import com.revan.anniversaryplugin.lib.*;
+import com.revan.anniversaryplugin.service.*;
+import com.revan.anniversaryplugin.activity.*;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
+import java.util.Date;
 import android.os.Build;
-import android.widget.Toast;  
 
 public class AlarmBoot extends BroadcastReceiver {
+      private UserService userServ = null;
 
-    @Override
-    public void onReceive(Context context, Intent intentp) {
-		
-        if (intentp.getAction().equals("android.intent.action.BOOT_COMPLETED")){
-			
-			Intent intent = new Intent(context, RebootService.class);
-			
-			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) { 	//version API 26 
-				NotificationCreation nc = new NotificationCreation(context);	// init channel
-				nc.CreateNotificationChannel();
-				context.startForegroundService(intent);
-				
-			} else {  
-	
-				context.startService(intent);
-			}
-        }
+      @Override
+      public void onReceive(Context context, Intent intentp) {		
+            if (intentp.getAction().equals("android.intent.action.BOOT_COMPLETED")){
+                  this.userServ = new UserService(context); 
+
+                  Intent intentServ = new Intent(context, AlarmBroadcastService.class);
+                  intentServ.putExtra("broadcast","ALARM_RECEIVER");
+
+                  if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {// version API 26 
+                        context.startForegroundService(intentServ);        
+                  } else  context.startService(intentServ);
+
+                  String dateNow = DateOperation.ConvertToString(new Date(),"dd-MM-yyyy");
+                  int nbrUserRappel = this.userServ.countMonthAnniv(dateNow);
+                  int nbrUserAnniv = this.userServ.countUserAnniv(dateNow);
+
+                  if(nbrUserRappel > 0 || nbrUserAnniv > 0)
+                  {
+                        Intent intentActivity = new Intent(context,WakeUp.class);
+                        intentActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK ); 
+                        intentActivity.putExtra("nbrUserRappel",nbrUserRappel);
+                        intentActivity.putExtra("nbrUserAnniv",nbrUserAnniv);
+                        context.startActivity(intentActivity);
+                  }   
+            }
     }
 }

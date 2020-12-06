@@ -60,6 +60,7 @@ public class AlarmPlugin extends CordovaPlugin{
       private CallbackContext callback = null;
       private OptionService optionServ = null;
       private UserService userServ = null;
+      private AlarmeService alarmServ = null;	
           
       @Override
 	public void onPause(boolean multitasking) {	
@@ -219,8 +220,7 @@ public class AlarmPlugin extends CordovaPlugin{
                               if(this.optionServ.update(sms, hour)){                          		
                                     String date = DateOperation.ConvertToString(new Date(),"dd-MM-yyyy") +" "+ hour;
                                     IntentCreation intentC = new IntentCreation(date,this.cordova.getActivity()); 
-                                    Alarme alarm = new Alarme(intentC.Create(),this.cordova.getActivity());	
-                                    alarm.Update();
+                                    this.alarmServ.Update(intentC.Create(),this.cordova.getActivity());	
 
                                     resp = "Mise à jour effectuée";	
                               }					
@@ -257,8 +257,8 @@ public class AlarmPlugin extends CordovaPlugin{
       private boolean Init(){ 
             this.optionServ = new OptionService(this.cordova.getActivity());
             this.userServ = new UserService(this.cordova.getActivity());  
+            this.alarmServ = new AlarmeService();
            
-
             NotificationCreation nc = new NotificationCreation(this.cordova.getActivity());// init channel
             nc.CreateNotificationChannel();
             
@@ -268,9 +268,8 @@ public class AlarmPlugin extends CordovaPlugin{
       private String InitAlarm(){
             String hour = this.optionServ.getHour();        
             String date = DateOperation.ConvertToString(new Date(),"dd-MM-yyyy") +" "+ hour;
-            IntentCreation intentC = new IntentCreation(date,this.cordova.getActivity());           
-            Alarme alarm = new Alarme(intentC.Create(),this.cordova.getActivity());				
+            IntentCreation intentC = new IntentCreation(date,this.cordova.getActivity());           		
 
-            return alarm.Create();
+            return this.alarmServ.Create(intentC.Create(),this.cordova.getActivity());
       }
 }	

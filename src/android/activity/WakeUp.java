@@ -34,7 +34,7 @@ public class WakeUp extends Activity  {
             int nbrUserRappel = intent.getIntExtra("nbrUserRappel", 0);
             int nbrUserAnniv = intent.getIntExtra("nbrUserAnniv", 0);
 
-		setContentView(getApplication().getResources().getIdentifier("wake_up_activity", "layout", package_name));//ajout du view
+		setContentView(getApplication().getResources().getIdentifier("wake_up_activity", "layout", package_name));// ajout du view
 
             Resources r = getApplication().getResources();  
             int idTextView = r.getIdentifier("textView", "id", package_name);// récupère l'id du textview

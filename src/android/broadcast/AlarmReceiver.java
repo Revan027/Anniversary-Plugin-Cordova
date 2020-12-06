@@ -3,10 +3,14 @@ package com.revan.anniversaryplugin.broadcast;
 import com.revan.anniversaryplugin.lib.*;
 import com.revan.anniversaryplugin.service.*;
 import com.revan.anniversaryplugin.activity.*;
+import com.revan.anniversaryplugin.db.*;
+import com.revan.anniversaryplugin.service.*;
+import com.revan.anniversaryplugin.alarme.*;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import java.util.Date;
+import android.os.Build;
 
 public class AlarmReceiver extends BroadcastReceiver {
       
@@ -15,6 +19,13 @@ public class AlarmReceiver extends BroadcastReceiver {
       @Override
       public void onReceive(Context context, Intent intent) {
             this.userServ = new UserService(context); 
+
+            Intent intentServ = new Intent(context, AlarmBroadcastService.class);
+            intentServ.putExtra("broadcast","ALARM_RECEIVER");
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {// version API 26 
+                  context.startForegroundService(intentServ);        
+            } else  context.startService(intentServ);
 
             String dateNow = DateOperation.ConvertToString(new Date(),"dd-MM-yyyy");
             int nbrUserRappel = this.userServ.countMonthAnniv(dateNow);
@@ -28,5 +39,5 @@ public class AlarmReceiver extends BroadcastReceiver {
                   intentActivity.putExtra("nbrUserAnniv",nbrUserAnniv);
                   context.startActivity(intentActivity);
             }   
-    }
+     }
 }
